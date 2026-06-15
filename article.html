@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>文章详情 · 纳凌薇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', 'Helvetica Neue', 'Noto Sans', system-ui, -apple-system, sans-serif;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .article-container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 1.5rem;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            color: #a18cd1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: #e0d4ff;
+            transform: translateX(-3px);
+        }
+
+        .article-title {
+            font-size: 1.8rem;
+            color: #e0d4ff;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #a18cd1;
+            padding-left: 1rem;
+            word-break: break-word;
+        }
+
+        .article-meta {
+            color: #8882b8;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+        }
+
+        .article-content {
+            color: #ddd8f0;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .article-content p {
+            margin-bottom: 1rem;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            border-radius: 16px;
+            margin: 1rem 0;
+            display: block;
+        }
+
+        .article-content h2 {
+            color: #e0d4ff;
+            margin: 1.5rem 0 0.8rem 0;
+            font-size: 1.3rem;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-left: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content li {
+            margin: 0.3rem 0;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 75vh;
+            min-height: 500px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 1rem 0;
+            background: #f5f5f5;
+        }
+
+        .pdf-fallback {
+            text-align: center;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+        }
+
+        .pdf-fallback p {
+            margin-bottom: 0.8rem;
+            color: #b9b3e6;
+        }
+
+        .pdf-fallback a {
+            color: #a18cd1;
+            text-decoration: none;
+        }
+
+        .pdf-fallback a:hover {
+            color: #e0d4ff;
+            text-decoration: underline;
+        }
+
+        .download-btn {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        padding: 0.8rem 1.5rem;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 0.5rem;
+        transition: all 0.2s;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .download-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        }
+
+        .copyright {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #8882b8;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 0.8rem; }
+            .article-container { padding: 1.2rem; }
+            .article-title { font-size: 1.4rem; }
+            .pdf-viewer { height: 60vh; min-height: 400px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="article-container">
+            <a href="index.html" class="back-link">← 返回主页</a>
+            <div id="articleContent">
+                <div class="loading" style="text-align:center;color:#ddd8f0;padding:3rem;">📖 加载中...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="copyright">
+        © 2026 纳凌薇 · 爱希尔芙纳 (Asephina). 版权所有.
+    </div>
+
+    <script>
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 检测是否为移动端
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        async function loadArticle() {
+            const articlePath = getUrlParam('path');
+            const container = document.getElementById('articleContent');
+            
+            if (!articlePath) {
+                container.innerHTML = '<div class="error" style="text-align:center; padding:3rem; color:#fbc2eb;">❌ 无效的文章链接</div>';
+                return;
+            }
+            
+            // ========== 1. 判断是否为 PDF 文件 ==========
+            if (articlePath.toLowerCase().endsWith('.pdf')) {
+                const fileName = articlePath.split('/').pop();
+                let title = fileName.replace('.pdf', '').replace(/_/g, ' ');
+                if (title.length > 50) title = title.substring(0, 50) + '...';
+                
+                // 获取 PDF 的完整 URL
+                const fullPdfUrl = new URL(articlePath, window.location.href).href;
+                const isMobileDevice = isMobile();
+                
+                if (isMobileDevice) {
+                    // ========== 手机端：使用自部署的 PDF.js ==========
+                    const pdfJsViewer = `/web/viewer.html?file=${encodeURIComponent(fullPdfUrl)}`;
+                    container.innerHTML = `
+                        <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
+                        <div class="article-meta">
+                            📅 ${escapeHtml(new Date().toISOString().split('T')[0])} &nbsp;|&nbsp;
+                            📂 文本文档
+                        </div>
+                        <div class="pdf-fallback">
+                            <p>📱 手机端使用 PDF.js 阅读器</p>
+                            <p>💡 如果下方阅读器加载失败，请点击按钮直接打开文档</p>
+                            <a href="${escapeHtml(fullPdfUrl)}" target="_blank" class="download-btn">📥 直接打开/下载文档</a>
+                        </div>
+                        <iframe class="pdf-viewer" src="${pdfJsViewer}" title="PDF阅读器" loading="lazy"></iframe>
+                    `;
+                } else {
+                    // ========== 电脑端：使用浏览器原生 PDF 阅读器 ==========
+                    container.innerHTML = `
+                        <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
+                        <div class="article-meta">
+                            📅 ${escapeHtml(new Date().toISOString().split('T')[0])} &nbsp;|&nbsp;
+                            📂 文本文档
+                        </div>
+                        <div class="pdf-fallback">
+                            <p>💻 电脑端使用浏览器原生 PDF 阅读器</p>
+                            <p>💡 如果下方阅读器加载失败，请点击按钮直接打开文档</p>
+                            <a href="${escapeHtml(fullPdfUrl)}" target="_blank" class="download-btn">📥 直接打开/下载文档</a>
+                        </div>
+                        <object class="pdf-viewer" data="${fullPdfUrl}" type="application/pdf">
+                            <p>无法加载预览，<a href="${escapeHtml(fullPdfUrl)}" target="_blank">点击这里查看文档</a></p>
+                        </object>
+                    `;
+                }
+                return;
+            }
+            
+            // ========== 2. 处理普通的 JSON 文章 ==========
+            try {
+                const response = await fetch(articlePath);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const article = await response.json();
+                
+                let contentHtml = formatContent(article.content || '');
+                
+                container.innerHTML = `
+                    <h1 class="article-title">${escapeHtml(article.title)}</h1>
+                    <div class="article-meta">
+                        📅 ${escapeHtml(article.date || '未知日期')} &nbsp;|&nbsp;
+                        📂 ${escapeHtml(article.category || '未分类')}
+                    </div>
+                    <div class="article-content">${contentHtml}</div>
+                `;
+                
+                fixImagePaths();
+                
+            } catch (error) {
+                console.error('加载文章失败:', error);
+                container.innerHTML = `<div class="error" style="text-align:center; padding:3rem; color:#fbc2eb;">❌ 加载失败<br><br>${escapeHtml(error.message)}</div>`;
+            }
+        }
+        
+        function formatContent(text) {
+            if (!text) return '<p>无内容</p>';
+            
+            let html = text;
+            
+            html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="article-image">');
+            html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:#a18cd1;">$1</a>');
+            html = html.replace(/^# (.*?)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^## (.*?)$/gm, '<h3 style="color:#e0d4ff; margin:1rem 0 0.5rem 0;">$1</h3>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            const lines = html.split('\n');
+            let inList = false;
+            let result = [];
+            let listItems = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                
+                if (line.startsWith('<h') || line.startsWith('<a') || line.startsWith('<img')) {
+                    if (inList) {
+                        result.push('<ul>' + listItems.join('') + '</ul>');
+                        inList = false;
+                        listItems = [];
+                    }
+                    result.push(line);
+                    continue;
+                }
+                
+                if (line.trim().startsWith('- ')) {
+                    if (!inList) {
+                        inList = true;
+                        listItems = [];
+                    }
+                    listItems.push(`<li>${escapeHtml(line.trim().substring(2))}</li>`);
+                } else {
+                    if (inList) {
+                        result.push('<ul>' + listItems.join('') + '</ul>');
+                        inList = false;
+                        listItems = [];
+                    }
+                    if (line.trim()) {
+                        result.push(`<p>${escapeHtml(line)}</p>`);
+                    }
+                }
+            }
+            if (inList) {
+                result.push('<ul>' + listItems.join('') + '</ul>');
+            }
+            
+            return result.join('');
+        }
+        
+        function fixImagePaths() {
+            const images = document.querySelectorAll('.article-image');
+            const currentPath = getUrlParam('path');
+            if (!currentPath) return;
+            
+            const pathParts = currentPath.split('/');
+            const depth = pathParts.length - 1;
+            const backPath = '../'.repeat(depth);
+            
+            images.forEach(img => {
+                let src = img.getAttribute('src');
+                if (src && !src.startsWith('http') && !src.startsWith('/') && !src.startsWith('data:')) {
+                    const newSrc = backPath + src;
+                    img.setAttribute('src', newSrc);
+                }
+            });
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        loadArticle();
+    </script>
+</body>
+</html>
