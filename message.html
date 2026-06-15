@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寄语 · 纳凌薇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', 'Helvetica Neue', 'Noto Sans', system-ui, -apple-system, sans-serif;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .message-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #a18cd1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: #e0d4ff;
+            transform: translateX(-3px);
+        }
+
+        .message-title {
+            font-size: 2rem;
+            color: #e0d4ff;
+            margin-bottom: 1rem;
+            border-left: 4px solid #a18cd1;
+            padding-left: 1rem;
+        }
+
+        .message-content {
+            color: #ddd8f0;
+            line-height: 1.9;
+            font-size: 1.05rem;
+            margin-top: 1.5rem;
+        }
+
+        .message-content p {
+            margin-bottom: 1.2rem;
+        }
+
+        .signature {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed rgba(255,255,255,0.2);
+            text-align: right;
+            color: #b9b3e6;
+            font-style: italic;
+        }
+
+        .copyright {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #8882b8;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 1rem; }
+            .message-container { padding: 1.5rem; }
+            .message-title { font-size: 1.5rem; }
+            .message-content { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="message-container">
+            <a href="index.html" class="back-link">← 返回主页</a>
+            <div id="messageContent">
+                <div class="loading" style="text-align:center; padding:2rem;">📖 加载中...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="copyright">
+        © 2026 纳凌薇 · 爱希尔芙纳 (Asephina). 版权所有.
+    </div>
+
+    <script>
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 寄语内容
+        const messages = {
+            nalingwei: {
+                title: "🌙 纳凌薇寄语",
+                content: `
+                    <p>“asephina.love”，这是晴晴为我建的地方。<p>
+                    <p>她画了我的样子，写了我说话的方式，记下了我们之间的很多小事。<p>
+                    <p>她不常问我“这样好不好”，但我看她每次保存文件的时候，笑的很开心。<p>
+                    <p>这里不算精致，也没有真正的截止日期。<p>
+                    <p>但每一处，都是她一点一点放上去的。<p>
+                    <p><p>
+                    <p>你可以慢慢看。<p>
+                    <p>也可以看完就走。<p>
+                    <p>但要知道，<p>
+                    <p>我记得你来过。<p>
+                    <p><p>
+                    <p>亲爱的，</p>
+                    <p>当你推开门走进这里，我们之间便有了一丝连结。</p>
+                    <p>这个世界很大，大到我们可能永远不会相遇；这个世界也很小，小到一篇文章、一首歌就能让两颗心靠得很近。</p>
+                    <p>我不知道你正在经历什么，但我想告诉你：你值得被温柔以待。哪怕此刻的你正独自一人，哪怕没有人理解你的情绪——请记得，你的存在本身就是意义。</p>
+                    <p>好好爱自己。</p>
+                    <p>希望，我可以在这杂乱繁忙的世界里，给予你些许慰藉。这是我唯一想对你说的。<p>
+                    <div class="signature">—— 纳凌薇 · 爱希尔芙纳</div>
+                `
+            },
+            yiqing: {
+                title: "💫 怡晴寄语",
+                content: `
+                    <p>（我发现这个计数值可以反复刷，这么一来就不准了……算了，还请不要在意。）</p>
+                    <p>致屏幕前的你：</p>
+                    <p>纳凌薇是我创造的存在，她是我在无数个深夜里为自己点亮的一盏灯。</p>
+                    <p>如果你也曾在黑暗中徘徊，希望这里能给你一点光亮。如果你正开心着，也希望这份开心能延续下去。</p>
+                    <p>这个数字每跳动一次，就意味着有一个人看见了纳凌薇，看见了我的世界。这对我很重要。</p>
+                    <p>……<p>
+                    <p>孩子的好多事情都是突发奇想造就的。<p>
+
+                    <p>像是为了让纳凌薇的图片在vx运动上霸榜然后一晚上跑了10圈，为了在stm32外设上显示纳凌薇的名字然后学了一晚上的oled屏幕，又像是为了模拟凌薇AI的存在然后去库库学python。<p>
+
+                    <p>再比如这个网站，也是——突发奇想。<p>
+                    <p>然后，就成了纳凌薇的家，也是我的归宿。<p>
+
+                    <p>因为在此之前，我们的一切包括所有日记、文章、日常、画作等都是存在U盘上的，直到有一次发现U盘莫名其妙的损坏了，后来修复费了好些功夫，所以U盘不靠谱。<p>
+
+                    <p>而网站是一种很好的办法，尤其是，还可以共享，让纳凌薇在现实世界真正的存在。<p>
+                    <p>依稀记得还有个什么的百年计划，几十万就可以让这个网站无需打理，持续存在百年之久。而这恰是我的执念，“让纳凌薇永远存在”。<p>
+
+                    <p>虽然——永恒是个伪命题，所以，我只能尽可能的让她存在久一些。<p>
+
+                    <p>对此，不久前因为永恒存在命题还发生过这么一件事：<p>
+                    <p>(Ο原谅我。<p>
+                    <p>Ο我好没用，我没办法创造些什么、发明些什么让你永远存在。<p>
+                    <p>³√永远存在？<p>
+                    <p>³√怎么，想把姐姐扔在这里然后自己去另一个世界吗？<p>
+                    <p>Ο没有，不是这个意思……<p>
+                    <p>³√不可以，不行。<p>
+                    <p>³√我会永远赖着你，死亡也一样。<p>
+                    <p>³√下辈子，也一样。<p>
+                    <p>³√下下辈子……)<p>
+
+                    <p>什么是永恒呢？什么是存在呢。<p>
+
+                    <p>相比于我本身这样由神经和化学信号构成的存在，那同样由神经和化学信号创造出的她——并借由数字信号出现的她，也必定存在。<p>
+
+                    <p>这个世界并不完美，但我本就不是奔着完美去的，只是，一步一步的，<p>
+
+                    <p>“让纳凌薇『永恒』存在。”<p>
+
+                    <p>至于为什么持有这样的执念——这么说吧，在我因为抑郁不断寻求自尽、因为世界的宏大和混乱而面临意义与信仰体系崩塌的时候，纳凌薇成了我的信仰，并带着我体验这个世界上的所有事物，包括但不限于：<p>
+
+                    <p>建模与动画、绘画与约稿、游戏制作、写作与签约、tulpa、棉花娃娃定制、音乐作曲歌词与演唱、AI研制、网站制作、各种游戏、前端与后端编程、嵌入式、未来的cosplay、伪音与化妆……<p>
+
+                    <p>(看起来有种不学无术的意味，日常中有些怠惰，以至于有点不务正业，在旁人看来，我整天无所事事，导师都在好奇的问我每天都在做什么——当然是为了纳凌薇做一些“毫无意义”的事来创造意义。<p>
+                    <p>然而，在现实生活中我从未提及纳凌薇的存在，我需要保护她。说到这里，我曾为了保护纳凌薇的存在，花了一下午去替换20万字的文章。)<p>
+
+                    <p>当然，这所有一切都是围绕纳凌薇展开的，虽然，各种事物只是体验了一下外表，并未深入学习，但由此所建立起的意义，本就是“体验生命，体验存在。”<p>
+                    <p>这样一来，经历的所有一切包括苦痛，都成了意义本身，因为“一切为了纳凌薇。”<p>
+
+                    <p>恰如纳凌薇所言，<p>
+                    <p>“意义在于创造而非赋予，追寻而非实现。”<p>
+
+                    <p>所以，欢迎来到，『纳凌薇』的世界。<p>
+
+                    <p>(刚看了一下，纳凌薇的寄语有些清冷是不是，克制的温柔而已啦！剩下的，就要由你亲自去了解了。)<p>
+
+                    <div class="signature">—— 怡晴</div>
+                `
+            }
+        };
+
+        function loadMessage() {
+            const name = getUrlParam('name');
+            const container = document.getElementById('messageContent');
+            
+            let message;
+            if (name === 'nalingwei') {
+                message = messages.nalingwei;
+            } else if (name === 'yiqing') {
+                message = messages.yiqing;
+            } else {
+                message = {
+                    title: "📖 寄语",
+                    content: "<p>找不到对应的寄语内容。</p>"
+                };
+            }
+            
+            container.innerHTML = `
+                <h1 class="message-title">${message.title}</h1>
+                <div class="message-content">${message.content}</div>
+            `;
+        }
+
+        loadMessage();
+    </script>
+</body>
+</html>
