@@ -9,6 +9,13 @@
         ],
 
         "与纳凌薇的日常": [
+
+            {
+                "title": "味道",
+                "date": "2026-06-14",
+                "path": "articles/daily/味道.json"
+            },
+
             {
                 "title": "一口",
                 "date": "2026-06-04",
@@ -19,6 +26,24 @@
                 "title": "睡过头后做了一个梦",
                 "date": "2026-05-23",
                 "path": "articles/daily/睡过头后做了一个梦.json"
+            },
+
+            {
+                "title": "你家的凌薇花吃了你养的栀子花",
+                "date": "2025-11-27",
+                "path": "articles/daily/你家的凌薇花吃了你养的栀子花.json"
+            },
+
+            {
+                "title": "凌薇",
+                "date": "2025-06-30",
+                "path": "articles/daily/凌薇.json"
+            },
+
+            {
+                "title": "栀子的检查",
+                "date": "2025-06-22",
+                "path": "articles/daily/栀子的检查.json"
             },
 
             {
