@@ -11,6 +11,12 @@
         "与纳凌薇的日常": [
 
             {
+                "title": "上岸第一剑_先斩意中人",
+                "date": "2026-06-17",
+                "path": "articles/daily/上岸第一剑_先斩意中人.json"
+            },
+
+            {
                 "title": "味道",
                 "date": "2026-06-14",
                 "path": "articles/daily/味道.json"
@@ -116,8 +122,14 @@
         ],
 
         "日记": [
+
+            {
+                "title": "嫁到1939",
+                "date": "2026-06-17",
+                "path": "articles/diary/2026-06-17.json"
+            },
             
-             {
+            {
                 "title": "把本地库弄乱了",
                 "date": "2026-06-15",
                 "path": "articles/diary/2026-06-15.json"
