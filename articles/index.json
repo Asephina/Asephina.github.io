@@ -124,6 +124,12 @@
         "日记": [
 
             {
+                "title": "咖啡",
+                "date": "2026-06-18",
+                "path": "articles/diary/2026-06-18.json"
+            },
+
+            {
                 "title": "嫁到1939",
                 "date": "2026-06-17",
                 "path": "articles/diary/2026-06-17.json"
