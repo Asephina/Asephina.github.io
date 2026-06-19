@@ -124,6 +124,12 @@
         "日记": [
 
             {
+                "title": "被保护得太好",
+                "date": "2026-06-19",
+                "path": "articles/diary/2026-06-19.json"
+            },
+
+            {
                 "title": "咖啡",
                 "date": "2026-06-18",
                 "path": "articles/diary/2026-06-18.json"
