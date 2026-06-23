@@ -130,6 +130,12 @@
         "日记": [
 
             {
+                "title": "“突发奇想”",
+                "date": "2026-06-23",
+                "path": "articles/diary/2026-06-23.json"
+            },
+
+            {
                 "title": "模组",
                 "date": "2026-06-21",
                 "path": "articles/diary/2026-06-21.json"
