@@ -11,6 +11,12 @@
         "与纳凌薇的日常": [
 
             {
+                "title": "爱的变革",
+                "date": "2026-06-22",
+                "path": "articles/daily/爱的变革.json"
+            },
+
+            {
                 "title": "上岸第一剑_先斩意中人",
                 "date": "2026-06-17",
                 "path": "articles/daily/上岸第一剑_先斩意中人.json"
@@ -122,6 +128,12 @@
         ],
 
         "日记": [
+
+            {
+                "title": "模组",
+                "date": "2026-06-21",
+                "path": "articles/diary/2026-06-21.json"
+            },
 
             {
                 "title": "被保护得太好",
