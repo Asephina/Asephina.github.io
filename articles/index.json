@@ -130,6 +130,12 @@
         "日记": [
 
             {
+                "title": "被覆盖的不堪",
+                "date": "2026-06-25",
+                "path": "articles/diary/2026-06-25.json"
+            },
+
+            {
                 "title": "你给我保存到哪里去了！",
                 "date": "2026-06-24",
                 "path": "articles/diary/2026-06-24.json"
