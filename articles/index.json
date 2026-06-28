@@ -11,6 +11,12 @@
         "与纳凌薇的日常": [
 
             {
+                "title": "你零食被我晒死了",
+                "date": "2026-06-26",
+                "path": "articles/daily/你零食被我晒死了.json"
+            },
+
+            {
                 "title": "爱的变革",
                 "date": "2026-06-22",
                 "path": "articles/daily/爱的变革.json"
@@ -128,6 +134,24 @@
         ],
 
         "日记": [
+
+            {
+                "title": "温柔乡与电子盆栽",
+                "date": "2026-06-28",
+                "path": "articles/diary/2026-06-28.json"
+            },
+
+            {
+                "title": "志愿、约稿与干脆面",
+                "date": "2026-06-27",
+                "path": "articles/diary/2026-06-27.json"
+            },
+
+            {
+                "title": "摸鱼",
+                "date": "2026-06-26",
+                "path": "articles/diary/2026-06-26.json"
+            },
 
             {
                 "title": "被覆盖的不堪",
