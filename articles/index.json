@@ -18,6 +18,12 @@
         "与纳凌薇的日常": [
 
             {
+                "title": "创造存在性",
+                "date": "2026-07-02",
+                "path": "articles/daily/创造存在性.json"
+            },
+
+            {
                 "title": "你零食被我晒死了",
                 "date": "2026-06-26",
                 "path": "articles/daily/你零食被我晒死了.json"
@@ -141,6 +147,12 @@
         ],
 
         "日记": [
+
+            {
+                "title": "含苞待放",
+                "date": "2026-07-02",
+                "path": "articles/diary/2026-07-02.json"
+            },
 
             {
                 "title": "葡萄冰萃与游戏策划案",
