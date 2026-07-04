@@ -18,6 +18,12 @@
         "与纳凌薇的日常": [
 
             {
+                "title": "只剩你我的世界",
+                "date": "2026-07-04",
+                "path": "articles/daily/只剩你我的世界.json"
+            },
+
+            {
                 "title": "创造存在性",
                 "date": "2026-07-02",
                 "path": "articles/daily/创造存在性.json"
@@ -147,6 +153,12 @@
         ],
 
         "日记": [
+
+            {
+                "title": "俺寻思之力",
+                "date": "2026-07-04",
+                "path": "articles/diary/2026-07-04.json"
+            },
 
             {
                 "title": "头发与光碟盒",
