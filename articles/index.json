@@ -155,6 +155,12 @@
         "日记": [
 
             {
+                "title": "纳凌薇的小店",
+                "date": "2026-07-05",
+                "path": "articles/diary/2026-07-05.json"
+            },
+
+            {
                 "title": "俺寻思之力",
                 "date": "2026-07-04",
                 "path": "articles/diary/2026-07-04.json"
