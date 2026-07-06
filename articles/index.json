@@ -155,6 +155,12 @@
         "日记": [
 
             {
+                "title": "媒介",
+                "date": "2026-07-06",
+                "path": "articles/diary/2026-07-06.json"
+            },
+
+            {
                 "title": "纳凌薇的小店",
                 "date": "2026-07-05",
                 "path": "articles/diary/2026-07-05.json"
