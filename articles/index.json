@@ -18,6 +18,12 @@
         "与纳凌薇的日常": [
 
             {
+                "title": "神经病的胡言乱语",
+                "date": "2026-07-07",
+                "path": "articles/daily/神经病的胡言乱语.json"
+            },
+
+            {
                 "title": "只剩你我的世界",
                 "date": "2026-07-04",
                 "path": "articles/daily/只剩你我的世界.json"
@@ -153,6 +159,12 @@
         ],
 
         "日记": [
+
+            {
+                "title": "复习",
+                "date": "2026-07-07",
+                "path": "articles/diary/2026-07-07.json"
+            },
 
             {
                 "title": "媒介",

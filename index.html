@@ -587,6 +587,28 @@
             margin-top: auto;
         }
 
+        /* 声明栏 */
+        .declaration-bar {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            padding: 0.8rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            max-width: 100%;
+        }
+
+        .declaration-item {
+            font-size: 0.55rem;
+            color: #666;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+        }
+        
+        .declaration-item:not(:last-child) {
+            margin-bottom: 0.2rem;
+        }
+
         @media (max-width: 900px) {
             .counter-bar {
                 flex-direction: column;
@@ -721,6 +743,14 @@
         </div>
     </div>
 
+    <!-- 声明栏 -->
+    <div class="declaration-bar">
+        <div class="declaration-item">边界声明：此网站为私人记录与表达，未经明确授权，请勿转载、摘编或用于任何商业用途。</div>
+        <div class="declaration-item">免责声明：文中观点与内容仅代表个人立场，不构成任何参考或建议。如有困惑或困扰，请及时寻求专业帮助。</div>
+        <div class="declaration-item">内容预警：文中涉及心理状态与个人经历，部分内容可能触发情绪反应，请酌情阅读。</div>
+    </div>
+
+    <!-- 底部版权栏 -->
     <div class="copyright">
         © 2026 纳凌薇 · 爱希尔芙纳 (Asephina). 版权所有.
     </div>
