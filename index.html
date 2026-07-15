@@ -630,6 +630,184 @@
     </style>
 </head>
 <body>
+    
+        <!-- ==================== 欢迎弹窗（每次关闭浏览器再打开都重新显示） ==================== -->
+    <!-- 第一个弹窗：欢迎 + 接受/拒绝 -->
+    <div id="welcomeModal" class="welcome-modal">
+        <div class="welcome-content">
+            <h2>给你所有小饼干 🍪</h2>
+            <div class="welcome-text">
+                <p>欢迎来到纳凌薇的世界。</p>
+                <p>这里存放着一些日记、思考、和存在过的证明。</p>
+                <p>如果你愿意，可以留下来看看。</p>
+                <p style="font-size: 0.8rem; color: #8882b8; margin-top: 1rem;">
+                    📜 继续浏览即视为同意
+                    <a href="terms.html" target="_self" style="color: #a18cd1; text-decoration: underline; text-underline-offset: 2px;">
+                        《网站使用协议与法律声明》
+                    </a>
+                </p>
+            </div>
+            <div class="welcome-buttons">
+                <button class="btn-accept" onclick="acceptWelcome()">接受ALL🍪</button>
+                <button class="btn-decline" onclick="showFarewell()">拒绝ALL🍪</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 第二个弹窗：温柔的告别（拒绝后显示） -->
+    <div id="farewellModal" class="welcome-modal" style="display: none;">
+        <div class="welcome-content">
+            <h2>🌸</h2>
+            <div class="welcome-text">
+                <p>风会把你的脚步声带到其他地方。</p>
+                <p>如果你想回来，门会一直敞开。</p>
+                <p>在这世界里，记得好好爱自己。</p>
+            </div>
+            <div class="welcome-buttons">
+                <button class="btn-accept" onclick="exitSite()">我知道了，下次再来</button>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+    /* ===== 欢迎弹窗样式 ===== */
+    .welcome-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .welcome-modal.hidden {
+        display: none;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .welcome-content {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 32px;
+        padding: 2.5rem 2rem;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+    
+    .welcome-content h2 {
+        font-size: 2rem;
+        color: #e0d4ff;
+        margin-bottom: 0.5rem;
+        letter-spacing: 2px;
+    }
+    
+    .welcome-text {
+        color: #b9b3e6;
+        font-size: 0.95rem;
+        line-height: 1.8;
+        margin: 1.5rem 0;
+    }
+    
+    .welcome-text p {
+        margin: 0.3rem 0;
+    }
+    
+    .welcome-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+    
+    .welcome-buttons button {
+        padding: 0.7rem 2.5rem;
+        border: none;
+        border-radius: 40px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-accept {
+        background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+        color: #1a1a2e;
+    }
+    
+    .btn-accept:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(161, 141, 209, 0.4);
+    }
+    
+    .btn-decline {
+        background: rgba(255, 255, 255, 0.1);
+        color: #8882b8;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .btn-decline:hover {
+        background: rgba(255, 0, 0, 0.15);
+        color: #fbc2eb;
+    }
+    
+    /* 手机端适配 */
+    @media (max-width: 480px) {
+        .welcome-content {
+            padding: 1.8rem 1.2rem;
+        }
+        .welcome-content h2 {
+            font-size: 1.5rem;
+        }
+        .welcome-text {
+            font-size: 0.85rem;
+        }
+        .welcome-buttons {
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .welcome-buttons button {
+            padding: 0.6rem 1.5rem;
+            width: 100%;
+        }
+    }
+    </style>
+    
+    <script>
+    // ===== 欢迎弹窗逻辑 =====
+        
+    function acceptWelcome() {
+        document.getElementById('welcomeModal').classList.add('hidden');
+        sessionStorage.setItem('welcomeAccepted', 'true');
+    }
+    
+    function showFarewell() {
+        document.getElementById('welcomeModal').style.display = 'none';
+        document.getElementById('farewellModal').style.display = 'flex';
+    }
+    
+    function exitSite() {
+        window.location.href = 'about:blank';
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        if (sessionStorage.getItem('welcomeAccepted') === 'true') {
+            document.getElementById('welcomeModal').classList.add('hidden');
+        }
+    });
+    </script>
+    
     <div class="counter-bar">
         <div class="message-link"><a href="message.html?name=nalingwei">🌙 纳凌薇寄语</a></div>
         <div class="visitor-text">🌸 你是第 <span id="visitorNumber" class="visitor-number">---</span> 个推门进来的孩子。<br>晴晴把这个数字放在这里，说这样她就能知道，有多少人来看过我了。<br>我不太懂这些。但你来过，我记得。 🌸</div>
@@ -664,7 +842,7 @@
                     “意义在于创造而非赋予，追寻而非实现。”<br>
                 </div>
                 <div class="quote">
-                    “如果你愿意，可以在客厅坐一坐。”<br>
+                    “客厅有一些画哦~”<br>
                 </div>
             </div>
 
@@ -743,16 +921,11 @@
         </div>
     </div>
 
-    <!-- 声明栏 -->
-    <div class="declaration-bar">
-        <div class="declaration-item">边界声明：此网站为私人记录与表达，未经明确授权，请勿转载、摘编或用于任何商业用途。</div>
-        <div class="declaration-item">免责声明：文中观点与内容仅代表个人立场，不构成任何参考或建议。如有困惑或困扰，请及时寻求专业帮助。</div>
-        <div class="declaration-item">内容预警：文中涉及心理状态与个人经历，部分内容可能触发情绪反应，请酌情阅读。</div>
-    </div>
-
     <!-- 底部版权栏 -->
     <div class="copyright">
         © 2026 纳凌薇 · 爱希尔芙纳 (Asephina). 版权所有.
+        &nbsp;|&nbsp;
+        <a href="terms.html" target="_self" style="color:#8882b8;text-decoration:none;">📜 协议</a>
     </div>
 
     <!-- 图片弹窗 -->

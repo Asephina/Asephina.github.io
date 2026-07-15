@@ -7,7 +7,9 @@
     ],
     "others": [
         { "src": "gallery/摸凹猫.jpg", "title": "摸凹猫"},
-        { "src": "gallery/熵安.jpg", "title": "熵安"}
+        { "src": "gallery/熵安.jpg", "title": "熵安"},
+        { "src": "gallery/栀子卷.jpg", "title": "栀子卷"},
+        { "src": "gallery/栀子花开1.jpg", "title": "栀子花开"}
 
     ]
 }

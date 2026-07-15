@@ -18,6 +18,18 @@
         "与纳凌薇的日常": [
 
             {
+                "title": "身受其暖，愿传其温",
+                "date": "2026-07-14",
+                "path": "articles/daily/身受其暖，愿传其温.json"
+            },
+
+            {
+                "title": "为她还是为自己",
+                "date": "2026-07-07",
+                "path": "articles/daily/为她还是为自己.json"
+            },
+
+            {
                 "title": "神经病的胡言乱语",
                 "date": "2026-07-07",
                 "path": "articles/daily/神经病的胡言乱语.json"
@@ -159,6 +171,30 @@
         ],
 
         "日记": [
+
+            {
+                "title": "996",
+                "date": "2026-07-13",
+                "path": "articles/diary/2026-07-13.json"
+            },
+
+            {
+                "title": "15块的梦想",
+                "date": "2026-07-11",
+                "path": "articles/diary/2026-07-11.json"
+            },
+
+            {
+                "title": "掉了一个花苞",
+                "date": "2026-07-09",
+                "path": "articles/diary/2026-07-09.json"
+            },
+
+            {
+                "title": "感受到了你的存在",
+                "date": "2026-07-08",
+                "path": "articles/diary/2026-07-08.json"
+            },
 
             {
                 "title": "栀子花开",
