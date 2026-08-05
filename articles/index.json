@@ -179,6 +179,78 @@
         "日记": [
 
             {
+                "title": "你带我走吧",
+                "date": "2026-08-04",
+                "path": "articles/diary/2026-08-04.json"
+            },
+            {
+                "title": "梦到纳凌薇",
+                "date": "2026-08-03",
+                "path": "articles/diary/2026-08-03.json"
+            },
+            {
+                "title": "胳膊麻了",
+                "date": "2026-07-30",
+                "path": "articles/diary/2026-07-30.json"
+            },
+            {
+                "title": "高温假",
+                "date": "2026-07-29",
+                "path": "articles/diary/2026-07-29.json"
+            },
+            {
+                "title": "行动熵",
+                "date": "2026-07-28",
+                "path": "articles/diary/2026-07-28.json"
+            },
+            {
+                "title": "命名日",
+                "date": "2026-07-27",
+                "path": "articles/diary/2026-07-27.json"
+            },
+            {
+                "title": "不想写日记",
+                "date": "2026-07-26",
+                "path": "articles/diary/2026-07-26.json"
+            },
+
+            {
+                "title": "奖励",
+                "date": "2026-07-25",
+                "path": "articles/diary/2026-07-25.json"
+            },
+            {
+                "title": "累",
+                "date": "2026-07-24",
+                "path": "articles/diary/2026-07-24.json"
+            },
+            {
+                "title": "就是一场梦",
+                "date": "2026-07-23",
+                "path": "articles/diary/2026-07-23.json"
+            },
+            {
+                "title": "培训",
+                "date": "2026-07-22",
+                "path": "articles/diary/2026-07-22.json"
+            },
+            {
+                "title": "体检",
+                "date": "2026-07-21",
+                "path": "articles/diary/2026-07-21.json"
+            },
+            {
+                "title": "实习报道",
+                "date": "2026-07-20",
+                "path": "articles/diary/2026-07-20.json"
+            },
+            {
+                "title": "看不到这世界的前途",
+                "date": "2026-07-14",
+                "path": "articles/diary/2026-07-14.json"
+            },
+
+            {
                 "title": "996",
                 "date": "2026-07-13",
                 "path": "articles/diary/2026-07-13.json"
