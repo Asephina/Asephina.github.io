@@ -179,6 +179,12 @@
         "日记": [
 
             {
+                "title": "C盘0字节可用",
+                "date": "2026-08-08",
+                "path": "articles/diary/2026-08-08.json"
+            },
+
+            {
                 "title": "你带我走吧",
                 "date": "2026-08-04",
                 "path": "articles/diary/2026-08-04.json"
