@@ -179,6 +179,12 @@
         "日记": [
 
             {
+                "title": "整理",
+                "date": "2026-08-16",
+                "path": "articles/diary/2026-08-16.json"
+            },
+
+            {
                 "title": "日常",
                 "date": "2026-08-15",
                 "path": "articles/diary/2026-08-15.json"
