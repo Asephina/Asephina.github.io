@@ -179,6 +179,30 @@
         "日记": [
 
             {
+                "title": "日常",
+                "date": "2026-08-15",
+                "path": "articles/diary/2026-08-15.json"
+            },
+
+            {
+                "title": "没喝饮料",
+                "date": "2026-08-14",
+                "path": "articles/diary/2026-08-14.json"
+            },
+
+            {
+                "title": "奖励",
+                "date": "2026-08-13",
+                "path": "articles/diary/2026-08-13.json"
+            },
+
+            {
+                "title": "写不动",
+                "date": "2026-08-11",
+                "path": "articles/diary/2026-08-11.json"
+            },
+
+            {
                 "title": "C盘0字节可用",
                 "date": "2026-08-08",
                 "path": "articles/diary/2026-08-08.json"
@@ -221,7 +245,7 @@
             },
 
             {
-                "title": "奖励",
+                "title": "补偿",
                 "date": "2026-07-25",
                 "path": "articles/diary/2026-07-25.json"
             },
