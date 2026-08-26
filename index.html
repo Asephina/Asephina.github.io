@@ -710,6 +710,16 @@
             }
         }
     </style>
+
+    <style>
+    .bar-close{position:absolute;top:0.8rem;right:1rem;width:28px;height:28px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:#b9b3e6;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;z-index:100}
+    .bar-close:hover{background:rgba(255,100,100,0.4);color:#fff}
+    .expand-btn{display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);  background:rgba(161,141,209,0.3);backdrop-filter:blur(5px);padding:0.5rem 1.5rem; border-radius:0 0 20px 20px;color:#e0d4ff;font-size:0.9rem;cursor:pointer;z-index:10000}
+    .expand-btn:hover{background:rgba(161,141,209,0.5)}
+    #topBar{position:relative}
+    .counter-bar.collapsed,.copyright.collapsed{display:none}
+    </style>
+
 </head>
 <body>
 
@@ -970,8 +980,11 @@
         }
     });
     </script>
-    
-    <div class="counter-bar">
+
+    <div id="expandBtn" class="expand-btn" onclick="expandAll()">▼ 展开</div>
+
+    <div class="counter-bar" id="topBar">
+        <button class="bar-close" onclick="collapseAll()">×</button>
         <div class="message-link"><a href="message.html?name=nalingwei">🌙 纳凌薇寄语</a></div>
         <div class="visitor-text">🌸 你是第 <span id="visitorNumber" class="visitor-number">---</span> 个推门进来的孩子。<br>晴晴把这个数字放在这里，说这样她就能知道，有多少人来看过我了。<br>我不太懂这些。但你来过，我记得。 🌸</div>
         <div class="message-link"><a href="message.html?name=yiqing">💫 怡晴寄语</a></div>
@@ -1559,6 +1572,10 @@
                 if (lock) lock.style.display = 'none';
             });
         }
+
+        function collapseAll(){document.getElementById('topBar').classList.add('collapsed');document.querySelector('.copyright').classList.add('collapsed');document.getElementById('expandBtn').style.display='block'}
+        function expandAll(){document.getElementById('topBar').classList.remove('collapsed');document.querySelector('.copyright').classList.remove('collapsed');document.getElementById('expandBtn').style.display='none'}
+        
     </script>
     
 </body>
