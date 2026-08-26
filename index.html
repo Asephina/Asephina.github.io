@@ -37,6 +37,36 @@
             gap: 1rem;
         }
 
+        .nav-links {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .nav-links a {
+            color: #b9b3e6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background: rgba(161, 141, 209, 0.1);
+        }
+
+        .nav-links a:hover {
+            background: rgba(161, 141, 209, 0.3);
+            color: #e0d4ff;
+        }
+
+        .nav-links a.active {
+            background: rgba(161, 141, 209, 0.4);
+            color: #fff;
+        }
+
         .message-link {
             background: rgba(161, 141, 209, 0.2);
             border: 1px solid rgba(161, 141, 209, 0.4);
@@ -111,10 +141,57 @@
             padding: 2rem;
             box-shadow: 0 25px 45px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
             transition: transform 0.3s ease;
+            position: relative;
         }
 
         .card:hover {
             transform: translateY(-5px);
+        }
+
+        .panel-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50%;
+            color: #b9b3e6;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .card:hover .panel-close,
+        .articles-panel:hover .panel-close,
+        .gallery-panel:hover .panel-close,
+        .music-panel:hover .panel-close,
+        .changelog-panel:hover .panel-close {
+            display: flex;
+        }
+
+        .panel-close:hover {
+            background: rgba(255,100,100,0.3);
+            color: #fff;
+        }
+
+        .panel-wrapper {
+            display: none;
+        }
+
+        .panel-wrapper.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* 书房 - 与主名片等高，带滚动条 (滑块保持纵向) */
@@ -899,12 +976,20 @@
         <div class="visitor-text">🌸 你是第 <span id="visitorNumber" class="visitor-number">---</span> 个推门进来的孩子。<br>晴晴把这个数字放在这里，说这样她就能知道，有多少人来看过我了。<br>我不太懂这些。但你来过，我记得。 🌸</div>
         <div class="message-link"><a href="message.html?name=yiqing">💫 怡晴寄语</a></div>
         <span style="display:none;" id="busuanzi_value_site_pv"></span>
+        <div class="nav-links">
+            <a href="javascript:void(0)" onclick="togglePanel('card')">名片</a>
+            <a href="javascript:void(0)" onclick="togglePanel('articles-panel')">书房</a>
+            <a href="javascript:void(0)" onclick="togglePanel('gallery-panel')">客厅</a>
+            <a href="javascript:void(0)" onclick="togglePanel('music-panel')">音乐</a>
+            <a href="javascript:void(0)" onclick="togglePanel('changelog-panel')">日志</a>
+        </div>
     </div>
 
     <div class="main-content">
         <div class="container">
             <!-- 第1栏：主名片 -->
-            <div class="card">
+            <div class="card" id="card" style="display: none;">
+                <button class="panel-close" onclick="closePanel('card')">×</button>
                 <div class="avatar">
                     <div class="avatar-circle">
                         <img src="images/看板纳姐2.jpg" alt="纳凌薇半身像">
@@ -934,7 +1019,8 @@
             </div>
 
             <!-- 第2栏：书房 (带纵向滑块) -->
-            <div class="articles-panel">
+            <div class="articles-panel" id="articles-panel" style="display: none;">
+                <button class="panel-close" onclick="closePanel('articles-panel')">×</button>
                 <div class="articles-header"><span>📚</span> 书房 <span>🌸</span></div>
                 <div id="categoriesList">
                     <div class="loading">📚 加载分类中...</div>
@@ -944,7 +1030,8 @@
             <!-- 第3栏：右侧组合（客厅 + 音乐盒）- 顺序已调换，客厅在上，音乐在下 -->
             <div class="right-group">
                 <!-- 客厅：画作展示（已移除横向滚动条） -->
-                <div class="gallery-panel">
+                <div class="gallery-panel" id="gallery-panel" style="display: none;">
+                    <button class="panel-close" onclick="closePanel('gallery-panel')">×</button>
                     <div class="gallery-header"><span>🖼️</span> 客厅 <span>🎨</span></div>
                     <div id="galleryContent">
                         <div class="loading">🎨 加载中...</div>
@@ -952,7 +1039,8 @@
                 </div>
 
                 <!-- 音乐盒 - 放在客厅下面 -->
-                <div class="music-panel">
+                <div class="music-panel" id="music-panel" style="display: none;">
+                    <button class="panel-close" onclick="closePanel('music-panel')">×</button>
                     <div class="music-title"><span>🎵</span> 凌薇的音乐盒 <span>🎵</span></div>
                     <div class="custom-audio">
                         <audio id="audioPlayer" controls preload="metadata">
@@ -999,7 +1087,8 @@
             </div>
 
             <!-- 第4栏：更新日志 (带纵向滑块) -->
-            <div class="changelog-panel">
+            <div class="changelog-panel" id="changelog-panel" style="display: none;">
+                <button class="panel-close" onclick="closePanel('changelog-panel')">×</button>
                 <div class="changelog-header"><span>📋</span> 更新日志 <span>✨</span></div>
                 <div id="logList">
                     <div class="loading">📡 正在加载日志...</div>
@@ -1025,6 +1114,47 @@
 
     <script>
         // ==================== 访客计数器 ====================
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            
+            if (panel.style.display === 'none') {
+                panel.style.display = '';
+                panel.classList.add('visible');
+            } else {
+                panel.classList.remove('visible');
+                panel.style.display = 'none';
+            }
+            
+            updateNavActiveState();
+        }
+
+        function closePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            panel.classList.remove('visible');
+            panel.style.display = 'none';
+            updateNavActiveState();
+        }
+
+        function updateNavActiveState() {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            const panels = {
+                'card': document.getElementById('card'),
+                'articles-panel': document.getElementById('articles-panel'),
+                'gallery-panel': document.getElementById('gallery-panel'),
+                'music-panel': document.getElementById('music-panel'),
+                'changelog-panel': document.getElementById('changelog-panel')
+            };
+            
+            navLinks.forEach(link => {
+                const panelId = link.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (panels[panelId] && panels[panelId].style.display !== 'none') {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
         function initVisitorCounter() {
             const visitorSpan = document.getElementById('visitorNumber');
             let retryCount = 0;
