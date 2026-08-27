@@ -197,16 +197,22 @@
         async function getDocumentDate(pdfPath) {
             try {
                 const response = await fetch('articles/index.json');
-                if (!response.ok) return null;
+                if (!response.ok) {
+                    console.warn('index.json 响应失败:', response.status);
+                    return null;
+                }
                 
                 const data = await response.json();
-                const docs = data.categories?.['成册文档'] || [];
+                const docs = data['成册文档'] || data.categories?.['成册文档'] || [];
+                console.log('找到的成册文档:', docs);
                 
                 for (const doc of docs) {
                     if (doc.path === pdfPath) {
+                        console.log('匹配到文档日期:', doc.date);
                         return doc.date;
                     }
                 }
+                console.warn('未找到匹配路径:', pdfPath);
                 return null;
             } catch (error) {
                 console.error('获取文档日期失败:', error);
