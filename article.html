@@ -194,6 +194,26 @@
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
 
+        async function getDocumentDate(pdfPath) {
+            try {
+                const response = await fetch('articles/index.json');
+                if (!response.ok) return null;
+                
+                const data = await response.json();
+                const docs = data.categories?.['成册文档'] || [];
+                
+                for (const doc of docs) {
+                    if (doc.path === pdfPath) {
+                        return doc.date;
+                    }
+                }
+                return null;
+            } catch (error) {
+                console.error('获取文档日期失败:', error);
+                return null;
+            }
+        }
+        
         async function loadArticle() {
             const articlePath = getUrlParam('path');
             const container = document.getElementById('articleContent');
@@ -203,8 +223,11 @@
                 return;
             }
             
+            let documentDate = null;
+            
             // ========== 1. 判断是否为 PDF 文件 ==========
             if (articlePath.toLowerCase().endsWith('.pdf')) {
+                documentDate = await getDocumentDate(articlePath);
                 const fileName = articlePath.split('/').pop();
                 let title = fileName.replace('.pdf', '').replace(/_/g, ' ');
                 if (title.length > 50) title = title.substring(0, 50) + '...';
@@ -216,10 +239,11 @@
                 if (isMobileDevice) {
                     // ========== 手机端：使用自部署的 PDF.js ==========
                     const pdfJsViewer = `/web/viewer.html?file=${encodeURIComponent(fullPdfUrl)}`;
+                    const displayDate = documentDate || new Date().toISOString().split('T')[0];
                     container.innerHTML = `
                         <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
                         <div class="article-meta">
-                            📅 ${escapeHtml(new Date().toISOString().split('T')[0])} &nbsp;|&nbsp;
+                            📅 ${escapeHtml(displayDate)} &nbsp;|&nbsp;
                             📂 文本文档
                         </div>
                         <div class="pdf-fallback">
@@ -234,7 +258,7 @@
                     container.innerHTML = `
                         <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
                         <div class="article-meta">
-                            📅 ${escapeHtml(new Date().toISOString().split('T')[0])} &nbsp;|&nbsp;
+                            📅 ${escapeHtml(displayDate)} &nbsp;|&nbsp;
                             📂 文本文档
                         </div>
                         <div class="pdf-fallback">
