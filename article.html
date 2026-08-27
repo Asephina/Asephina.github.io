@@ -241,11 +241,11 @@
                 // 获取 PDF 的完整 URL
                 const fullPdfUrl = new URL(articlePath, window.location.href).href;
                 const isMobileDevice = isMobile();
+                const displayDate = documentDate || new Date().toISOString().split('T')[0];
                 
                 if (isMobileDevice) {
                     // ========== 手机端：使用自部署的 PDF.js ==========
                     const pdfJsViewer = `/web/viewer.html?file=${encodeURIComponent(fullPdfUrl)}`;
-                    const displayDate = documentDate || new Date().toISOString().split('T')[0];
                     container.innerHTML = `
                         <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
                         <div class="article-meta">
