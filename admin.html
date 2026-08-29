@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容管理 · 纳凌薇</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
+            color: #e0d4ff;
+            padding: 1rem;
+            padding-bottom: 80px;
+        }
+        h1 { text-align: center; margin-bottom: 1rem; font-size: 1.3rem; }
+        
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .card h2 { font-size: 1rem; margin-bottom: 0.8rem; color: #a18cd1; }
+        
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(20, 20, 50, 0.95);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #8882b8;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .tab-btn.active { color: #a18cd1; }
+        .tab-icon { font-size: 1.3rem; }
+        
+        label { display: block; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        input, textarea, select {
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #a18cd1;
+        }
+        textarea { min-height: 120px; resize: vertical; }
+        
+        button {
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            border: none;
+            background: #a18cd1;
+            color: #fff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        button:hover { background: #b8a0e0; }
+        button.secondary { background: rgba(255,255,255,0.15); }
+        button.secondary:hover { background: rgba(255,255,255,0.25); }
+        button.danger { background: #f87171; }
+        button.danger:hover { background: #fca5a5; }
+        button.small { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+        
+        .token-section {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        .token-input { display: none; }
+        .token-input.show { display: block; }
+        
+        .item-list { max-height: 45vh; overflow-y: auto; }
+        .item {
+            background: rgba(0,0,0,0.2);
+            padding: 0.7rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item-info { flex: 1; }
+        .item-title { font-weight: bold; font-size: 0.9rem; }
+        .item-date { font-size: 0.75rem; color: #8882b8; }
+        .item-actions { display: flex; gap: 0.3rem; }
+        
+        .edit-form { display: none; }
+        .edit-form.show { display: block; }
+        
+        .success { color: #4ade80; text-align: center; margin: 0.5rem 0; }
+        .error { color: #f87171; text-align: center; margin: 0.5rem 0; }
+        
+        .hidden { display: none !important; }
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        .category-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .category-tab.active { background: #a18cd1; }
+    </style>
+</head>
+<body>
+    <h1>📱 内容管理</h1>
+    
+    <div class="token-section">
+        <button onclick="toggleToken()" class="secondary" id="tokenBtn">🔑 设置 GitHub Token</button>
+        <div class="token-input" id="tokenSection">
+            <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
+            <button onclick="saveToken()">保存 Token</button>
+        </div>
+        <p style="font-size:0.75rem; color:#8882b8; margin-top:0.5rem;">
+            生成: GitHub → Settings → Dev settings → Personal access tokens → Generate (需勾选 repo)
+        </p>
+    </div>
+
+    <div id="mainContent" class="hidden">
+        <div class="card">
+            <h2>📝 选择管理类别</h2>
+            <div class="category-tabs" id="categoryTabs"></div>
+            <div class="item-list" id="itemList"></div>
+        </div>
+        
+        <div class="card edit-form" id="editForm">
+            <h2 id="formTitle">编辑</h2>
+            <input type="hidden" id="editIndex">
+            <input type="hidden" id="editCategory">
+            
+            <label>标题:</label>
+            <input type="text" id="editTitle">
+            
+            <label>日期:</label>
+            <input type="text" id="editDate">
+            
+            <label id="pathLabel">路径:</label>
+            <input type="text" id="editPath">
+            
+            <label id="contentLabel" class="hidden">内容:</label>
+            <textarea id="editContent" class="hidden"></textarea>
+            
+            <div>
+                <button onclick="saveItem()">💾 保存</button>
+                <button onclick="cancelEdit()" class="secondary">取消</button>
+                <button onclick="deleteItem()" class="danger" id="deleteBtn">🗑️ 删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <p id="status"></p>
+
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('articles')">
+            <span class="tab-icon">📚</span>
+            <span>文章</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('gallery')">
+            <span class="tab-icon">🖼️</span>
+            <span>画廊</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('changelog')">
+            <span class="tab-icon">📋</span>
+            <span>日志</span>
+        </button>
+    </div>
+
+    <script>
+        const REPO_OWNER = 'asephina';
+        const REPO_NAME = 'asephina.github.io';
+        const BRANCH = 'main';
+        
+        let token = localStorage.getItem('gh_token') || '';
+        let currentTab = 'articles';
+        let currentCategory = '';
+        let data = { articles: null, gallery: null, changelog: null };
+        
+        const articleCategories = ['凌薇花', '与纳凌薇的日常', '成册文档', '散文', '日记'];
+        
+        const fileConfig = {
+            articles: { file: 'articles/index.json', categories: articleCategories },
+            gallery: { file: 'gallery/index.json', categories: ['featured', 'others'] },
+            changelog: { file: 'updatelog/index.json', categories: ['updates'] }
+        };
+
+        if (token) {
+            document.getElementById('tokenBtn').textContent = '✓ Token 已设置';
+            loadAllData();
+        }
+
+        function toggleToken() {
+            document.getElementById('tokenSection').classList.toggle('show');
+        }
+
+        function saveToken() {
+            token = document.getElementById('token').value.trim();
+            if (token) {
+                localStorage.setItem('gh_token', token);
+                document.getElementById('tokenBtn').textContent = '✓ Token 已设置';
+                document.getElementById('tokenSection').classList.remove('show');
+                loadAllData();
+            }
+        }
+
+        async function loadAllData() {
+            showStatus('⏳ 加载中...', '');
+            try {
+                const [articlesRes, galleryRes, changelogRes] = await Promise.all([
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/articles/index.json?ref=${BRANCH}`, getAuth()),
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/gallery/index.json?ref=${BRANCH}`, getAuth()),
+                    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/updatelog/index.json?ref=${BRANCH}`, getAuth())
+                ]);
+                
+                data.articles = { 
+                    content: JSON.parse(atob((await articlesRes.json()).content)),
+                    sha: (await articlesRes.json()).sha,
+                    raw: await articlesRes.json()
+                };
+                data.gallery = { 
+                    content: JSON.parse(atob((await galleryRes.json()).content)),
+                    sha: (await galleryRes.json()).sha,
+                    raw: await galleryRes.json()
+                };
+                data.changelog = { 
+                    content: JSON.parse(atob((await changelogRes.json()).content)),
+                    sha: (await changelogRes.json()).sha,
+                    raw: await changelogRes.json()
+                };
+                
+                document.getElementById('mainContent').classList.remove('hidden');
+                renderCategoryTabs();
+                showStatus('', '');
+            } catch (err) {
+                showStatus('❌ 加载失败: ' + err.message, 'error');
+            }
+        }
+
+        function getAuth() {
+            return { headers: { 'Authorization': `token ${token}` } };
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            currentCategory = '';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.closest('.tab-btn').classList.add('active');
+            renderCategoryTabs();
+            document.getElementById('editForm').classList.remove('show');
+        }
+
+        function renderCategoryTabs() {
+            const config = fileConfig[currentTab];
+            const tabs = document.getElementById('categoryTabs');
+            
+            if (currentTab === 'articles') {
+                tabs.innerHTML = config.categories.map(cat => 
+                    `<div class="category-tab ${currentCategory === cat ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat}</div>`
+                ).join('');
+            } else {
+                tabs.innerHTML = config.categories.map(cat => 
+                    `<div class="category-tab ${currentCategory === cat ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat === 'featured' ? '精选' : cat === 'others' ? '其他' : '更新'}</div>`
+                ).join('');
+            }
+            
+            if (config.categories.length > 0 && !currentCategory) {
+                selectCategory(config.categories[0]);
+            }
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-tab').forEach(t => {
+                t.classList.toggle('active', t.textContent.includes(category) || 
+                    (category === 'featured' && t.textContent === '精选') ||
+                    (category === 'others' && t.textContent === '其他') ||
+                    (category === 'updates' && t.textContent === '更新'));
+            });
+            renderItemList();
+            document.getElementById('editForm').classList.remove('show');
+        }
+
+        function renderItemList() {
+            const list = document.getElementById('itemList');
+            let items = [];
+            
+            if (currentTab === 'articles') {
+                items = data.articles.content.categories[currentCategory] || [];
+            } else if (currentTab === 'gallery') {
+                items = data.gallery.content[currentCategory] || [];
+            } else if (currentTab === 'changelog') {
+                items = data.changelog.content.updates || [];
+            }
+            
+            if (items.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#8882b8;padding:1rem;">暂无内容</p>';
+                return;
+            }
+            
+            list.innerHTML = items.map((item, i) => `
+                <div class="item">
+                    <div class="item-info">
+                        <div class="item-title">${item.title}</div>
+                        <div class="item-date">${item.date || ''} ${item.path || ''}</div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="small secondary" onclick="editItem(${i})">✏️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editItem(index) {
+            const config = fileConfig[currentTab];
+            let items = [];
+            
+            if (currentTab === 'articles') {
+                items = data.articles.content.categories[currentCategory] || [];
+            } else if (currentTab === 'gallery') {
+                items = data.gallery.content[currentCategory] || [];
+            } else if (currentTab === 'changelog') {
+                items = data.changelog.content.updates || [];
+            }
+            
+            const item = items[index];
+            document.getElementById('editIndex').value = index;
+            document.getElementById('editCategory').value = currentCategory;
+            document.getElementById('editTitle').value = item.title || '';
+            document.getElementById('editDate').value = item.date || '';
+            document.getElementById('editPath').value = item.path || '';
+            
+            const contentField = document.getElementById('editContent');
+            const contentLabel = document.getElementById('contentLabel');
+            const pathLabel = document.getElementById('pathLabel');
+            
+            if (currentTab === 'changelog') {
+                contentField.value = item.content || '';
+                contentField.classList.remove('hidden');
+                contentLabel.classList.remove('hidden');
+                pathLabel.classList.add('hidden');
+                document.getElementById('editPath').classList.add('hidden');
+            } else {
+                contentField.classList.add('hidden');
+                contentLabel.classList.add('hidden');
+                pathLabel.classList.remove('hidden');
+                document.getElementById('editPath').classList.remove('hidden');
+            }
+            
+            document.getElementById('formTitle').textContent = '编辑 ' + currentCategory;
+            document.getElementById('editForm').classList.add('show');
+            document.getElementById('itemList').classList.add('hidden');
+        }
+
+        function cancelEdit() {
+            document.getElementById('editForm').classList.remove('show');
+            document.getElementById('itemList').classList.remove('hidden');
+        }
+
+        async function saveItem() {
+            const index = parseInt(document.getElementById('editIndex').value);
+            const category = document.getElementById('editCategory').value;
+            const title = document.getElementById('editTitle').value.trim();
+            const date = document.getElementById('editDate').value.trim();
+            const path = document.getElementById('editPath').value.trim();
+            const content = document.getElementById('editContent').value.trim();
+            
+            if (!title) {
+                showStatus('❌ 标题不能为空', 'error');
+                return;
+            }
+            
+            let items, targetData;
+            if (currentTab === 'articles') {
+                items = data.articles.content.categories[category] || [];
+                targetData = data.articles;
+            } else if (currentTab === 'gallery') {
+                items = data.gallery.content[category] || [];
+                targetData = data.gallery;
+            } else {
+                items = data.changelog.content.updates || [];
+                targetData = data.changelog;
+            }
+            
+            const newItem = { title };
+            if (date) newItem.date = date;
+            if (path) newItem.path = path;
+            if (content) newItem.content = content;
+            
+            items[index] = newItem;
+            
+            if (currentTab === 'articles') {
+                data.articles.content.categories[category] = items;
+            } else if (currentTab === 'gallery') {
+                data.gallery.content[category] = items;
+            } else {
+                data.changelog.content.updates = items;
+            }
+            
+            await saveToGitHub(targetData);
+        }
+
+        async function deleteItem() {
+            if (!confirm('确定要删除吗？')) return;
+            
+            const index = parseInt(document.getElementById('editIndex').value);
+            const category = document.getElementById('editCategory').value;
+            
+            let items, targetData;
+            if (currentTab === 'articles') {
+                items = data.articles.content.categories[category] || [];
+                targetData = data.articles;
+            } else if (currentTab === 'gallery') {
+                items = data.gallery.content[category] || [];
+                targetData = data.gallery;
+            } else {
+                items = data.changelog.content.updates || [];
+                targetData = data.changelog;
+            }
+            
+            items.splice(index, 1);
+            
+            if (currentTab === 'articles') {
+                data.articles.content.categories[category] = items;
+            } else if (currentTab === 'gallery') {
+                data.gallery.content[category] = items;
+            } else {
+                data.changelog.content.updates = items;
+            }
+            
+            await saveToGitHub(targetData);
+        }
+
+        async function saveToGitHub(targetData) {
+            showStatus('⏳ 保存中...', '');
+            
+            try {
+                const filePath = fileConfig[currentTab].file;
+                const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(targetData.content, null, 4))));
+                
+                const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `更新 ${currentTab} - ${currentCategory}`,
+                        content: newContent,
+                        sha: targetData.sha,
+                        branch: BRANCH
+                    })
+                });
+                
+                if (response.ok) {
+                    const newData = await response.json();
+                    targetData.sha = newData.content.sha;
+                    showStatus('✅ 保存成功！网站将自动更新', 'success');
+                    renderItemList();
+                    cancelEdit();
+                } else {
+                    const err = await response.json();
+                    showStatus('❌ 保存失败: ' + err.message, 'error');
+                }
+            } catch (err) {
+                showStatus('❌ 错误: ' + err.message, 'error');
+            }
+        }
+
+        function showStatus(msg, type) {
+            const status = document.getElementById('status');
+            status.textContent = msg;
+            status.className = type;
+        }
+    </script>
+</body>
+</html>
