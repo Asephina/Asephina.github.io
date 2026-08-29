@@ -279,7 +279,11 @@
             currentTab = tab;
             currentCategory = '';
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            event.target.closest('.tab-btn').classList.add('active');
+            var btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(function(b) { b.classList.remove('active'); });
+            var targetMap = { 'articles': '文章', 'gallery': '画廊', 'changelog': '日志' };
+            var activeBtn = Array.from(btns).find(function(b) { return b.textContent.includes           (targetMap[tab]); });
+            if (activeBtn) activeBtn.classList.add('active');
             renderCategoryTabs();
             document.getElementById('editForm').classList.remove('show');
         }
