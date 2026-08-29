@@ -243,20 +243,24 @@
                     fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/updatelog/index.json?ref=${BRANCH}`, getAuth())
                 ]);
                 
+                const articlesJson = await articlesRes.json();
+                const galleryJson = await galleryRes.json();
+                const changelogJson = await changelogRes.json();
+                
                 data.articles = { 
-                    content: JSON.parse(atob((await articlesRes.json()).content)),
-                    sha: (await articlesRes.json()).sha,
-                    raw: await articlesRes.json()
+                    content: JSON.parse(atob(articlesJson.content)),
+                    sha: articlesJson.sha,
+                    raw: articlesJson
                 };
                 data.gallery = { 
-                    content: JSON.parse(atob((await galleryRes.json()).content)),
-                    sha: (await galleryRes.json()).sha,
-                    raw: await galleryRes.json()
+                    content: JSON.parse(atob(galleryJson.content)),
+                    sha: galleryJson.sha,
+                    raw: galleryJson
                 };
                 data.changelog = { 
-                    content: JSON.parse(atob((await changelogRes.json()).content)),
-                    sha: (await changelogRes.json()).sha,
-                    raw: await changelogRes.json()
+                    content: JSON.parse(atob(changelogJson.content)),
+                    sha: changelogJson.sha,
+                    raw: changelogJson
                 };
                 
                 document.getElementById('mainContent').classList.remove('hidden');
