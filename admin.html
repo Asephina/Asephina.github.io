@@ -9,7 +9,8 @@
         body { font-family: sans-serif; padding: 20px; background: #1a1a2e; color: #fff; }
         h1 { text-align: center; margin-bottom: 20px; }
         .token-box { background: #16213e; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #0f3460; color: #fff; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #0f3460; color: #fff; }
+        textarea { min-height: 200px; resize: vertical; }
         button { padding: 10px 20px; background: #a18cd1; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
         button:active { background: #8a6cb8; }
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -25,10 +26,12 @@
         .form-box.show { display: block; }
         .form-box h2 { margin-bottom: 15px; }
         .form-box input { display: block; margin-bottom: 15px; }
-        .form-box .btns { display: flex; gap: 10px; }
+        .form-box .btns { display: flex; gap: 10px; flex-wrap: wrap; }
         #msg { text-align: center; margin: 10px 0; }
         .error { color: #f87171; }
         .success { color: #4ade80; }
+        label { display: block; margin-bottom: 5px; font-size: 14px; color: #aaa; }
+        .add-btn { background: #4ade80; color: #000; }
     </style>
 </head>
 <body>
@@ -56,9 +59,22 @@
             <h2 id="formTitle">编辑</h2>
             <input type="hidden" id="editIndex">
             <input type="hidden" id="editCat">
+            <input type="hidden" id="editOldPath">
+            
+            <label>标题:</label>
             <input type="text" id="editTitle" placeholder="标题">
+            
+            <label>日期:</label>
             <input type="text" id="editDate" placeholder="日期">
+            
+            <label>路径:</label>
             <input type="text" id="editPath" placeholder="路径">
+            
+            <div id="contentSection">
+                <label>文章内容 (JSON格式):</label>
+                <textarea id="editContent" placeholder='{"content":"文章内容..."}'></textarea>
+            </div>
+            
             <div class="btns">
                 <button onclick="saveItem()">保存</button>
                 <button onclick="cancelEdit()" style="background:#555">取消</button>
@@ -177,20 +193,37 @@
             else items = data.changelog.content.updates || [];
         } catch(e) { items = []; }
         
-        if (items.length === 0) {
-            list.innerHTML = '<p style="text-align:center;color:#888;padding:20px;">暂无内容</p>';
-            return;
+        var html = '';
+        if (items.length > 0) {
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                html += '<div class="item">';
+                html += '<div class="item-info"><div>' + item.title + '</div><div>' + (item.date || '') + ' ' + (item.path || '') + '</div></div>';
+                html += '<div><button style="background:#555;font-size:12px;" onclick="editItem(' + i + ')">编辑</button></div>';
+                html += '</div>';
+            }
         }
         
-        var html = '';
-        for (var i = 0; i < items.length; i++) {
-            var item = items[i];
-            html += '<div class="item" onclick="editItem(' + i + ')">';
-            html += '<div class="item-info"><div>' + item.title + '</div><div>' + (item.date || '') + ' ' + (item.path || '') + '</div></div>';
-            html += '<button style="background:#555;font-size:12px;">编辑</button>';
-            html += '</div>';
-        }
+        html += '<div style="text-align:center;margin-top:15px;"><button class="add-btn" onclick="addItem()">+ 新增</button></div>';
         list.innerHTML = html;
+    }
+
+    function addItem() {
+        document.getElementById('editIndex').value = '-1';
+        document.getElementById('editCat').value = curCat;
+        document.getElementById('editTitle').value = '';
+        document.getElementById('editDate').value = '';
+        document.getElementById('editPath').value = '';
+        document.getElementById('editContent').value = '';
+        document.getElementById('editOldPath').value = '';
+        document.getElementById('formTitle').textContent = '新增 - ' + curCat;
+        document.getElementById('formBox').classList.add('show');
+        
+        if (curTab !== 'articles' || curCat === '成册文档') {
+            document.getElementById('contentSection').style.display = 'none';
+        } else {
+            document.getElementById('contentSection').style.display = 'block';
+        }
     }
 
     function editItem(idx) {
@@ -205,8 +238,33 @@
         document.getElementById('editTitle').value = item.title || '';
         document.getElementById('editDate').value = item.date || '';
         document.getElementById('editPath').value = item.path || '';
-        document.getElementById('formTitle').textContent = '编辑 ' + curCat;
+        document.getElementById('editOldPath').value = item.path || '';
+        document.getElementById('editContent').value = '';
+        document.getElementById('formTitle').textContent = '编辑 - ' + curCat;
         document.getElementById('formBox').classList.add('show');
+        
+        if (curTab !== 'articles' || curCat === '成册文档') {
+            document.getElementById('contentSection').style.display = 'none';
+        } else {
+            document.getElementById('contentSection').style.display = 'block';
+            if (item.path && item.path.endsWith('.json')) {
+                fetchArticleContent(item.path);
+            }
+        }
+    }
+
+    function fetchArticleContent(path) {
+        fetch('https://api.github.com/repos/' + REPO + '/contents/' + path + '?ref=' + BRANCH, {
+            headers: { 'Authorization': 'token ' + token }
+        }).then(function(r) { return r.json(); }).then(function(json) {
+            if (json.content) {
+                var content = decodeURIComponent(escape(atob(json.content)));
+                document.getElementById('editContent').value = content;
+                document.getElementById('editContent').setAttribute('data-sha', json.sha);
+            }
+        }).catch(function(err) {
+            showMsg('无法加载文章内容: ' + err.message, 'error');
+        });
     }
 
     function cancelEdit() {
@@ -219,6 +277,9 @@
         var title = document.getElementById('editTitle').value.trim();
         var date = document.getElementById('editDate').value.trim();
         var path = document.getElementById('editPath').value.trim();
+        var oldPath = document.getElementById('editOldPath').value.trim();
+        var content = document.getElementById('editContent').value.trim();
+        var isNew = idx === -1;
         
         if (!title) { showMsg('标题不能为空', 'error'); return; }
         
@@ -227,9 +288,55 @@
         else if (curTab === 'gallery') { items = data.gallery.content[cat]; target = data.gallery; }
         else { items = data.changelog.content.updates; target = data.changelog; }
         
-        items[idx] = { title: title, date: date, path: path };
+        // 如果是文章且不是成册文档，需要先保存内容文件
+        if (curTab === 'articles' && cat !== '成册文档' && path && path.endsWith('.json') && content) {
+            showMsg('保存文章内容中...', '');
+            var contentSha = document.getElementById('editContent').getAttribute('data-sha') || null;
+            saveArticleFile(path, content, contentSha, function() {
+                // 内容保存成功后，更新 index.json
+                var newItem = { title: title, date: date, path: path };
+                if (isNew) {
+                    items.push(newItem);
+                } else {
+                    items[idx] = newItem;
+                }
+                saveToGitHub(target);
+            });
+        } else {
+            // 不需要保存内容文件
+            var newItem = { title: title, date: date, path: path };
+            if (isNew) {
+                items.push(newItem);
+            } else {
+                items[idx] = newItem;
+            }
+            saveToGitHub(target);
+        }
+    }
+
+    function saveArticleFile(path, content, sha, callback) {
+        var newContent = btoa(unescape(encodeURIComponent(content)));
+        var body = {
+            message: '更新文章: ' + path,
+            content: newContent,
+            branch: BRANCH
+        };
+        if (sha) body.sha = sha;
         
-        saveToGitHub(target);
+        fetch('https://api.github.com/repos/' + REPO + '/contents/' + path, {
+            method: 'PUT',
+            headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        }).then(function(r) { return r.json(); }).then(function(json) {
+            if (json.content) {
+                document.getElementById('editContent').setAttribute('data-sha', json.content.sha);
+                callback();
+            } else {
+                showMsg('保存文章内容失败: ' + (json.message || '未知错误'), 'error');
+            }
+        }).catch(function(err) {
+            showMsg('保存文章内容失败: ' + err.message, 'error');
+        });
     }
 
     function deleteItem() {
