@@ -116,9 +116,9 @@
         })).then(function(responses) {
             return Promise.all(responses.map(function(r) { return r.json(); }));
         }).then(function(jsons) {
-            data.articles = { content: JSON.parse(atob(jsons[0].content)), sha: jsons[0].sha };
-            data.gallery = { content: JSON.parse(atob(jsons[1].content)), sha: jsons[1].sha };
-            data.changelog = { content: JSON.parse(atob(jsons[2].content)), sha: jsons[2].sha };
+            data.articles = { content: JSON.parse(decodeURIComponent(escape(atob(jsons[0].content)))), sha: jsons[0].sha };
+            data.gallery = { content: JSON.parse(decodeURIComponent(escape(atob(jsons[1].content)))), sha: jsons[1].sha };
+            data.changelog = { content: JSON.parse(decodeURIComponent(escape(atob(jsons[2].content)))), sha: jsons[2].sha };
             document.getElementById('main').style.display = 'block';
             renderCatTabs();
             showMsg('', '');
