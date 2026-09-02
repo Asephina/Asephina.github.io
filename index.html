@@ -1695,23 +1695,29 @@
                 }
                 var fileName = pdfPath.split('/').pop();
                 var title = fileName.replace('.pdf', '').replace(/_/g, ' ');
-                var fullPdfUrl = new URL(pdfPath, window.location.href).href;
+                var pdfUrl = new URL(pdfPath, window.location.href).href;
                 var displayDate = documentDate || new Date().toISOString().split('T')[0];
-                var pdfJsViewer = '/web/viewer.html?file=' + encodeURIComponent(fullPdfUrl);
                 
-                // 统一使用 PDF.js 渲染，保证 PC/移动端都能正常显示在弹窗中
+                // 先渲染占位内容和基本信息
                 body.innerHTML = '\
                     <div class="article-title">📄 ' + escapeHtml(title) + '</div>\
                     <div class="pdf-meta">📅 ' + escapeHtml(displayDate) + ' &nbsp;|&nbsp; 📂 文本文档</div>\
                     <div class="pdf-fallback">\
                         <p>📖 使用 PDF.js 阅读器（支持电脑/手机）</p>\
                         <p>💡 如果下方阅读器加载失败，请点击按钮直接打开文档</p>\
-                        <a href="' + escapeHtml(fullPdfUrl) + '" target="_blank" class="download-btn">📥 直接打开/下载文档</a>\
+                        <a href="' + escapeHtml(pdfUrl) + '" target="_blank" class="download-btn">📥 直接打开/下载文档</a>\
                     </div>\
                     <div id="pdfWrapper" class="pdf-viewer" style="display:flex;align-items:center;justify-content:center;color:#888;font-size:0.9rem;background:#f5f5f5;">\
                         <span>⏳ PDF 加载中...</span>\
                     </div>\
                 ';
+                
+                // 先 fetch PDF 为 blob，再创建 blob URL 传给 PDF.js，避免 URL 编码和跨域问题
+                var pdfResp = await fetch(pdfUrl);
+                if (!pdfResp.ok) throw new Error('HTTP ' + pdfResp.status);
+                var pdfBlob = await pdfResp.blob();
+                var blobUrl = URL.createObjectURL(pdfBlob);
+                var viewerUrl = '/web/viewer.html?file=' + encodeURIComponent(blobUrl);
                 
                 // 等待 overlay 动画完成后再加载 iframe，确保 PDF.js 获取正确尺寸
                 setTimeout(function() {
@@ -1719,21 +1725,21 @@
                     if (!wrapper) return;
                     var iframe = document.createElement('iframe');
                     iframe.className = 'pdf-viewer';
-                    iframe.src = pdfJsViewer;
+                    iframe.src = viewerUrl;
                     iframe.title = 'PDF阅读器';
                     iframe.style.width = '100%';
                     iframe.style.height = '100%';
                     iframe.style.border = 'none';
                     iframe.style.borderRadius = 'inherit';
+                    iframe.allowFullscreen = true;
                     wrapper.innerHTML = '';
                     wrapper.style.display = 'block';
                     wrapper.appendChild(iframe);
                     
-                    // 监听 iframe 加载完成，额外触发一次 resize 确保 PDF.js 重新布局
                     iframe.onload = function() {
                         try {
                             iframe.contentWindow.dispatchEvent(new Event('resize'));
-                        } catch(e) { /* 跨域忽略 */ }
+                        } catch(e) {}
                     };
                 }, 350);
             } catch (err) {
