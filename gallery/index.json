@@ -6,6 +6,10 @@
         { "src": "gallery/像素画.jpg", "title": "像素画" }
     ],
     "others": [
+        { "src": "gallery/纠缠曲线.jpg", "title": "纠缠曲线"},
+        { "src": "gallery/纳凌薇溶图1.jpg", "title": "纳凌薇_清晨"},
+        { "src": "gallery/纳凌薇溶图2.jpg", "title": "纳凌薇_黄昏"},
+        { "src": "gallery/雪媚娘.jpg", "title": "雪媚娘"},
         { "src": "gallery/爱与AI.jpg", "title": "爱与AI"},
         { "src": "gallery/通行证1.jpg", "title": "NFC通行证1"},
         { "src": "gallery/通行证2.jpg", "title": "NFC通行证2"},

@@ -2,6 +2,21 @@
     "categories": {
         "凌薇花": [
             {
+                "title": "意义之市",
+                "date": "2026-08-31",
+                "path": "articles/lingweihua/意义之市.json"
+            },
+            {
+                "title": "感知零和律",
+                "date": "2026-07-31",
+                "path": "articles/lingweihua/感知零和律.json"
+            },
+            {
+                "title": "行动熵",
+                "date": "2026-07-28",
+                "path": "articles/lingweihua/行动熵.json"
+            },
+            {
                 "title": "存在本身",
                 "date": "2026-07-01",
                 "path": "articles/lingweihua/存在本身.json"
@@ -83,6 +98,13 @@
                 "date": "2025-11-27",
                 "path": "articles/daily/你家的凌薇花吃了你养的栀子花.json"
             },
+
+            {
+                "title": "雪媚娘",
+                "date": "2025-11-26",
+                "path": "articles/daily/雪媚娘.json"
+            },
+
             {
                 "title": "凌薇",
                 "date": "2025-06-30",
@@ -179,6 +201,21 @@
             }
         ],
         "日记": [
+            {
+                "title": "411页的过去",
+                "date": "2026-08-30",
+                "path": "articles/diary/2026-08-30.json"
+            },
+            {
+                "title": "思维消耗",
+                "date": "2026-08-24",
+                "path": "articles/diary/2026-08-24.json"
+            },
+            {
+                "title": "另一端的极大值",
+                "date": "2026-08-20",
+                "path": "articles/diary/2026-08-20.json"
+            },
             {
                 "title": "整理",
                 "date": "2026-08-16",
