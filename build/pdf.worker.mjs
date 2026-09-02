@@ -20,6 +20,18 @@
  * JavaScript code in this page
  */
 
+// Promise.withResolvers polyfill (for browsers that don't support ES2024)
+if (!Promise.withResolvers) {
+  Promise.withResolvers = function() {
+    var aResolve, aReject;
+    var aPromise = new Promise(function(res, rej) {
+      aResolve = res;
+      aReject = rej;
+    });
+    return { promise: aPromise, resolve: aResolve, reject: aReject };
+  };
+}
+
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
 /******/ 
