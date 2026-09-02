@@ -1696,20 +1696,19 @@
                 var fileName = pdfPath.split('/').pop();
                 var title = fileName.replace('.pdf', '').replace(/_/g, ' ');
                 var fullPdfUrl = new URL(pdfPath, window.location.href).href;
-                var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 var displayDate = documentDate || new Date().toISOString().split('T')[0];
                 var pdfJsViewer = '/web/viewer.html?file=' + encodeURIComponent(fullPdfUrl);
                 
-                // 先渲染占位内容，不加载 iframe，避免 overlay 动画未完成时 iframe 尺寸错误
+                // 统一使用 PDF.js 渲染，保证 PC/移动端都能正常显示在弹窗中
                 body.innerHTML = '\
                     <div class="article-title">📄 ' + escapeHtml(title) + '</div>\
                     <div class="pdf-meta">📅 ' + escapeHtml(displayDate) + ' &nbsp;|&nbsp; 📂 文本文档</div>\
                     <div class="pdf-fallback">\
-                        <p>' + (isMobile ? '📱 手机端使用 PDF.js 阅读器' : '💻 电脑端使用浏览器原生 PDF 阅读器') + '</p>\
+                        <p>📖 使用 PDF.js 阅读器（支持电脑/手机）</p>\
                         <p>💡 如果下方阅读器加载失败，请点击按钮直接打开文档</p>\
                         <a href="' + escapeHtml(fullPdfUrl) + '" target="_blank" class="download-btn">📥 直接打开/下载文档</a>\
                     </div>\
-                    <div id="pdfWrapper" class="pdf-viewer" style="display:flex;align-items:center;justify-content:center;color:#888;font-size:0.9rem;">\
+                    <div id="pdfWrapper" class="pdf-viewer" style="display:flex;align-items:center;justify-content:center;color:#888;font-size:0.9rem;background:#f5f5f5;">\
                         <span>⏳ PDF 加载中...</span>\
                     </div>\
                 ';

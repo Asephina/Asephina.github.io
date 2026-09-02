@@ -245,43 +245,23 @@
                 
                 // 获取 PDF 的完整 URL
                 const fullPdfUrl = new URL(articlePath, window.location.href).href;
-                const isMobileDevice = isMobile();
                 const displayDate = documentDate || new Date().toISOString().split('T')[0];
+                const pdfJsViewer = `/web/viewer.html?file=${encodeURIComponent(fullPdfUrl)}`;
                 
-                if (isMobileDevice) {
-                    // ========== 手机端：使用自部署的 PDF.js ==========
-                    const pdfJsViewer = `/web/viewer.html?file=${encodeURIComponent(fullPdfUrl)}`;
-                    container.innerHTML = `
-                        <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
-                        <div class="article-meta">
-                            📅 ${escapeHtml(displayDate)} &nbsp;|&nbsp;
-                            📂 文本文档
-                        </div>
-                        <div class="pdf-fallback">
-                            <p>📱 手机端使用 PDF.js 阅读器</p>
-                            <p>💡 如果下方阅读器加载失败，请点击按钮直接打开文档</p>
-                            <a href="${escapeHtml(fullPdfUrl)}" target="_blank" class="download-btn">📥 直接打开/下载文档</a>
-                        </div>
-                        <iframe class="pdf-viewer" src="${pdfJsViewer}" title="PDF阅读器" loading="lazy"></iframe>
-                    `;
-                } else {
-                    // ========== 电脑端：使用浏览器原生 PDF 阅读器 ==========
-                    container.innerHTML = `
-                        <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
-                        <div class="article-meta">
-                            📅 ${escapeHtml(displayDate)} &nbsp;|&nbsp;
-                            📂 文本文档
-                        </div>
-                        <div class="pdf-fallback">
-                            <p>💻 电脑端使用浏览器原生 PDF 阅读器</p>
-                            <p>💡 如果下方阅读器加载失败，请点击按钮直接打开文档</p>
-                            <a href="${escapeHtml(fullPdfUrl)}" target="_blank" class="download-btn">📥 直接打开/下载文档</a>
-                        </div>
-                        <object class="pdf-viewer" data="${fullPdfUrl}" type="application/pdf">
-                            <p>无法加载预览，<a href="${escapeHtml(fullPdfUrl)}" target="_blank">点击这里查看文档</a></p>
-                        </object>
-                    `;
-                }
+                // 统一使用 PDF.js 渲染，保证 PC/移动端都能正常显示
+                container.innerHTML = `
+                    <h1 class="article-title">📄 ${escapeHtml(title)}</h1>
+                    <div class="article-meta">
+                        📅 ${escapeHtml(displayDate)} &nbsp;|&nbsp;
+                        📂 文本文档
+                    </div>
+                    <div class="pdf-fallback">
+                        <p>📖 使用 PDF.js 阅读器（支持电脑/手机）</p>
+                        <p>💡 如果下方阅读器加载失败，请点击按钮直接打开文档</p>
+                        <a href="${escapeHtml(fullPdfUrl)}" target="_blank" class="download-btn">📥 直接打开/下载文档</a>
+                    </div>
+                    <iframe class="pdf-viewer" src="${pdfJsViewer}" title="PDF阅读器" loading="lazy"></iframe>
+                `;
                 return;
             }
             
