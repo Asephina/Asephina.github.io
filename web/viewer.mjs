@@ -15347,4 +15347,13 @@ var __webpack_exports__PDFViewerApplicationConstants = __webpack_exports__.PDFVi
 var __webpack_exports__PDFViewerApplicationOptions = __webpack_exports__.PDFViewerApplicationOptions;
 export { __webpack_exports__PDFViewerApplication as PDFViewerApplication, __webpack_exports__PDFViewerApplicationConstants as PDFViewerApplicationConstants, __webpack_exports__PDFViewerApplicationOptions as PDFViewerApplicationOptions };
 
+// 接收来自父窗口的 PDF 二进制数据（通过 postMessage 绕过 URL 跨域问题）
+window.addEventListener('message', function(evt) {
+  if (evt.data && evt.data.type === 'loadPdfData' && evt.data.data && evt.data.data.byteLength) {
+    PDFViewerApplication.open({ data: evt.data.data }).catch(function(err) {
+      console.error('PDF load failed:', err);
+    });
+  }
+});
+
 //# sourceMappingURL=viewer.mjs.map

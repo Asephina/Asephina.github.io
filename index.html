@@ -1698,7 +1698,7 @@
                 var pdfUrl = new URL(pdfPath, window.location.href).href;
                 var displayDate = documentDate || new Date().toISOString().split('T')[0];
                 
-                // 先渲染占位内容和基本信息
+                // 先渲染占位内容
                 body.innerHTML = '\
                     <div class="article-title">📄 ' + escapeHtml(title) + '</div>\
                     <div class="pdf-meta">📅 ' + escapeHtml(displayDate) + ' &nbsp;|&nbsp; 📂 文本文档</div>\
@@ -1712,20 +1712,18 @@
                     </div>\
                 ';
                 
-                // 先 fetch PDF 为 blob，再创建 blob URL 传给 PDF.js，避免 URL 编码和跨域问题
+                // 先 fetch PDF 为 ArrayBuffer 传入 iframe，避免 URL 编码和跨域问题
                 var pdfResp = await fetch(pdfUrl);
                 if (!pdfResp.ok) throw new Error('HTTP ' + pdfResp.status);
-                var pdfBlob = await pdfResp.blob();
-                var blobUrl = URL.createObjectURL(pdfBlob);
-                var viewerUrl = '/web/viewer.html?file=' + encodeURIComponent(blobUrl);
+                var pdfArrayBuffer = await pdfResp.arrayBuffer();
                 
-                // 等待 overlay 动画完成后再加载 iframe，确保 PDF.js 获取正确尺寸
+                // 等待 overlay 动画完成后再加载 iframe
                 setTimeout(function() {
                     var wrapper = document.getElementById('pdfWrapper');
                     if (!wrapper) return;
                     var iframe = document.createElement('iframe');
                     iframe.className = 'pdf-viewer';
-                    iframe.src = viewerUrl;
+                    iframe.src = '/web/viewer.html?file=';
                     iframe.title = 'PDF阅读器';
                     iframe.style.width = '100%';
                     iframe.style.height = '100%';
@@ -1736,10 +1734,16 @@
                     wrapper.style.display = 'block';
                     wrapper.appendChild(iframe);
                     
+                    // 等 iframe 完全加载后，再延迟确保 viewer 初始化完成，然后传 PDF 数据
                     iframe.onload = function() {
-                        try {
-                            iframe.contentWindow.dispatchEvent(new Event('resize'));
-                        } catch(e) {}
+                        setTimeout(function() {
+                            try {
+                                iframe.contentWindow.postMessage({
+                                    type: 'loadPdfData',
+                                    data: pdfArrayBuffer
+                                }, '*');
+                            } catch(e) {}
+                        }, 500);
                     };
                 }, 350);
             } catch (err) {
