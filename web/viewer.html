@@ -28,7 +28,21 @@ See https://github.com/adobe-type-tools/cmap-resources
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
     <title>PDF.js viewer</title>
 
-<!-- This snippet is used in production (included from viewer.html) -->
+<!-- Promise.withResolvers polyfill (must be before all other scripts) -->
+  <script>
+  if (!Promise.withResolvers) {
+    Promise.withResolvers = function() {
+      var aResolve, aReject;
+      var aPromise = new Promise(function(res, rej) {
+        aResolve = res;
+        aReject = rej;
+      });
+      return { promise: aPromise, resolve: aResolve, reject: aReject };
+    };
+  }
+  </script>
+
+  <!-- This snippet is used in production (included from viewer.html) -->
 <link rel="resource" type="application/l10n" href="locale/locale.json">
 <script src="../build/pdf.mjs" type="module"></script>
 
