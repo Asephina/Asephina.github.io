@@ -881,6 +881,65 @@
         to { opacity: 1; }
     }
     
+    /* 文章阅读覆盖层 */
+    .article-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 99999;
+        animation: fadeIn 0.3s ease;
+    }
+    .article-overlay.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .article-overlay-content {
+        background: #1a1a2e;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        width: 95%;
+        height: 92%;
+        max-width: 1100px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    }
+    .article-overlay-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .article-overlay-header span {
+        color: #a18cd1;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .article-overlay-close {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 4px 12px;
+        border-radius: 6px;
+        transition: background 0.2s;
+    }
+    .article-overlay-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .article-iframe {
+        flex: 1;
+        width: 100%;
+        border: none;
+        background: #fff;
+    }
+    
     .welcome-content {
         background: linear-gradient(135deg, #1a1a2e, #16213e);
         border: 1px solid rgba(255, 255, 255, 0.15);
@@ -1397,7 +1456,7 @@
                             <ul class="article-list" style="display: block;">
                                 ${sortedArticles.map(article => `
                                     <li>
-                                        <a href="article.html?path=${encodeURIComponent(article.path)}" target="_blank">
+                                        <a href="javascript:void(0)" onclick="openArticleInOverlay('article.html?path=${encodeURIComponent(article.path)}', '${escapeHtml(article.title).replace(/'/g, "\\'")}')">
                                             ${escapeHtml(article.title)}
                                             <span class="article-date">${article.date || ''}</span>
                                         </a>
@@ -1424,6 +1483,33 @@
                 const arrow = element.querySelector('span:last-child');
                 if (arrow) arrow.innerHTML = isVisible ? '▶' : '▼';
             }
+        }
+
+        // ==================== 文章阅读覆盖层 ====================
+        function openArticleInOverlay(url, title) {
+            var overlay = document.getElementById('articleOverlay');
+            var iframe = document.getElementById('articleIframe');
+            var titleEl = document.getElementById('articleOverlayTitle');
+            iframe.src = url;
+            titleEl.textContent = title || '文章';
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.addEventListener('keydown', overlayKeyHandler);
+        }
+
+        function overlayKeyHandler(e) {
+            if (e.key === 'Escape') closeArticleOverlay();
+        }
+
+        function closeArticleOverlay(event) {
+            if (event && event.target !== event.currentTarget) return;
+            var overlay = document.getElementById('articleOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', overlayKeyHandler);
+            setTimeout(function() {
+                document.getElementById('articleIframe').src = 'about:blank';
+            }, 300);
         }
 
         // ==================== 画作加载 ====================
@@ -1599,5 +1685,16 @@
         
     </script>
     
+    <!-- 文章阅读覆盖层 -->
+    <div id="articleOverlay" class="article-overlay" onclick="closeArticleOverlay(event)">
+        <div class="article-overlay-content" onclick="event.stopPropagation()">
+            <div class="article-overlay-header">
+                <span id="articleOverlayTitle">文章</span>
+                <button class="article-overlay-close" onclick="closeArticleOverlay()">✕</button>
+            </div>
+            <iframe id="articleIframe" class="article-iframe" frameborder="0"></iframe>
+        </div>
+    </div>
+
 </body>
 </html>

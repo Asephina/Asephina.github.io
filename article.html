@@ -172,7 +172,7 @@
 <body>
     <div class="main-content">
         <div class="article-container">
-            <a href="index.html" class="back-link">← 返回主页</a>
+            <a href="index.html" class="back-link" id="backLink">← 返回主页</a>
             <div id="articleContent">
                 <div class="loading" style="text-align:center;color:#ddd8f0;padding:3rem;">📖 加载中...</div>
             </div>
@@ -182,6 +182,11 @@
     <div class="copyright">
         © 2026 纳凌薇 · 爱希尔芙纳 (Asephina). 版权所有.
     </div>
+    <script>
+    if (window.top !== window.self) {
+        document.getElementById('backLink').style.display = 'none';
+    }
+    </script>
 
     <script>
         function getUrlParam(name) {
