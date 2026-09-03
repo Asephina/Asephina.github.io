@@ -218,6 +218,11 @@
         ],
         "日记": [
             {
+                "title": "海",
+                "date": "2026-09-03",
+                "path": "articles/diary/2026-09-03.json"
+            },
+            {
                 "title": "411页的过去",
                 "date": "2026-08-30",
                 "path": "articles/diary/2026-08-30.json"
