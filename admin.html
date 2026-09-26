@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; padding: 20px; background: #1a1a2e; color: #fff; }
+        h1 { text-align: center; margin-bottom: 20px; }
+        .token-box { background: #16213e; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #0f3460; color: #fff; }
+        textarea { min-height: 200px; resize: vertical; }
+        button { padding: 10px 20px; background: #a18cd1; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:active { background: #8a6cb8; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { padding: 10px 20px; background: #333; border-radius: 5px; cursor: pointer; }
+        .tab.active { background: #a18cd1; }
+        .cat-tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; }
+        .cat-tab { padding: 8px 15px; background: #333; border-radius: 20px; font-size: 14px; white-space: nowrap; }
+        .cat-tab.active { background: #a18cd1; }
+        .item { background: #16213e; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .item-info div:first-child { font-weight: bold; margin-bottom: 5px; }
+        .item-info div:last-child { font-size: 12px; color: #888; }
+        .form-box { background: #16213e; padding: 20px; border-radius: 10px; display: none; }
+        .form-box.show { display: block; }
+        .form-box h2 { margin-bottom: 15px; }
+        .form-box input { display: block; margin-bottom: 15px; }
+        .form-box .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        #msg { text-align: center; margin: 10px 0; }
+        .error { color: #f87171; }
+        .success { color: #4ade80; }
+        label { display: block; margin-bottom: 5px; font-size: 14px; color: #aaa; }
+        .add-btn { background: #4ade80; color: #000; }
+    </style>
+</head>
+<body>
+    <h1>内容管理</h1>
+    
+    <div class="token-box">
+        <button id="tokenBtn" onclick="showTokenInput()">设置 GitHub Token</button>
+        <div id="tokenInput" style="display:none;">
+            <input type="password" id="token" placeholder="ghp_xxx">
+            <button onclick="saveToken()">保存</button>
+        </div>
+    </div>
+
+    <div id="main" style="display:none;">
+        <div class="tabs">
+            <div class="tab active" data-t="articles" onclick="switchTab('articles')">文章</div>
+            <div class="tab" data-t="gallery" onclick="switchTab('gallery')">画廊</div>
+            <div class="tab" data-t="changelog" onclick="switchTab('changelog')">日志</div>
+        </div>
+        
+        <div class="cat-tabs" id="catTabs"></div>
+        <div id="itemList"></div>
+        
+        <div class="form-box" id="formBox">
+            <h2 id="formTitle">编辑</h2>
+            <input type="hidden" id="editIndex">
+            <input type="hidden" id="editCat">
+            <input type="hidden" id="editOldPath">
+            
+            <label>标题:</label>
+            <input type="text" id="editTitle" placeholder="标题">
+            
+            <label>日期:</label>
+            <input type="text" id="editDate" placeholder="日期">
+            
+            <label>路径:</label>
+            <input type="text" id="editPath" placeholder="路径">
+            
+            <div id="contentSection">
+                <label>文章内容 (JSON格式):</label>
+                <textarea id="editContent" placeholder='{"content":"文章内容..."}'></textarea>
+            </div>
+            
+            <div class="btns">
+                <button onclick="saveItem()">保存</button>
+                <button onclick="cancelEdit()" style="background:#555">取消</button>
+                <button onclick="deleteItem()" style="background:#f87171">删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <p id="msg"></p>
+
+    <script>
+    var REPO = 'asephina/asephina.github.io';
+    var BRANCH = 'main';
+    var token = localStorage.getItem('gh_token') || '';
+    var curTab = 'articles';
+    var curCat = '';
+    var data = {};
+
+    var cats = {
+        articles: ['凌薇花', '与纳凌薇的日常', '成册文档', '散文', '日记'],
+        gallery: ['featured', 'others'],
+        changelog: ['updates']
+    };
+
+    if (token) {
+        document.getElementById('tokenBtn').textContent = 'Token已设置';
+        loadData();
+    }
+
+    function showTokenInput() {
+        var div = document.getElementById('tokenInput');
+        div.style.display = div.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function saveToken() {
+        token = document.getElementById('token').value.trim();
+        if (token) {
+            localStorage.setItem('gh_token', token);
+            document.getElementById('tokenBtn').textContent = 'Token已设置';
+            document.getElementById('tokenInput').style.display = 'none';
+            loadData();
+        }
+    }
+
+    function loadData() {
+        showMsg('加载中...', '');
+        var urls = [
+            'https://api.github.com/repos/' + REPO + '/contents/articles/index.json?ref=' + BRANCH,
+            'https://api.github.com/repos/' + REPO + '/contents/gallery/index.json?ref=' + BRANCH,
+            'https://api.github.com/repos/' + REPO + '/contents/updatelog/index.json?ref=' + BRANCH
+        ];
+        
+        Promise.all(urls.map(function(url) {
+            return fetch(url, { headers: { 'Authorization': 'token ' + token } });
+        })).then(function(responses) {
+            return Promise.all(responses.map(function(r) { return r.json(); }));
+        }).then(function(jsons) {
+            data.articles = { content: JSON.parse(decodeURIComponent(escape(atob(jsons[0].content)))), sha: jsons[0].sha };
+            data.gallery = { content: JSON.parse(decodeURIComponent(escape(atob(jsons[1].content)))), sha: jsons[1].sha };
+            data.changelog = { content: JSON.parse(decodeURIComponent(escape(atob(jsons[2].content)))), sha: jsons[2].sha };
+            document.getElementById('main').style.display = 'block';
+            renderCatTabs();
+            showMsg('', '');
+        }).catch(function(err) {
+            showMsg('加载失败: ' + err.message, 'error');
+        });
+    }
+
+    function switchTab(tab) {
+        curTab = tab;
+        curCat = '';
+        var tabs = document.querySelectorAll('.tab');
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        var active = Array.from(tabs).find(function(t) { return t.getAttribute('data-t') === tab; });
+        if (active) active.classList.add('active');
+        renderCatTabs();
+        document.getElementById('formBox').classList.remove('show');
+    }
+
+    function renderCatTabs() {
+        var arr = cats[curTab];
+        var html = '';
+        for (var i = 0; i < arr.length; i++) {
+            var c = arr[i];
+            var label = curTab === 'gallery' ? (c === 'featured' ? '精选' : '其他') : 
+                        curTab === 'changelog' ? '更新' : c;
+            html += '<div class="cat-tab ' + (curCat === c ? 'active' : '') + '" onclick="selectCat(\'' + c + '\')">' + label + '</div>';
+        }
+        document.getElementById('catTabs').innerHTML = html;
+        
+        if (arr.length > 0 && !curCat) {
+            selectCat(arr[0]);
+        }
+    }
+
+    function selectCat(cat) {
+        curCat = cat;
+        var tabs = document.querySelectorAll('.cat-tab');
+        tabs.forEach(function(t) { 
+            t.classList.toggle('active', t.textContent === cat || 
+                (cat === 'featured' && t.textContent === '精选') ||
+                (cat === 'others' && t.textContent === '其他') ||
+                (cat === 'updates' && t.textContent === '更新')); 
+        });
+        renderItems();
+        document.getElementById('formBox').classList.remove('show');
+    }
+
+    function renderItems() {
+        var list = document.getElementById('itemList');
+        var items = [];
+        
+        try {
+            if (curTab === 'articles') items = data.articles.content.categories[curCat] || [];
+            else if (curTab === 'gallery') items = data.gallery.content[curCat] || [];
+            else items = data.changelog.content.updates || [];
+        } catch(e) { items = []; }
+        
+        var html = '';
+        if (items.length > 0) {
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                html += '<div class="item">';
+                html += '<div class="item-info"><div>' + item.title + '</div><div>' + (item.date || '') + ' ' + (item.path || '') + '</div></div>';
+                html += '<div><button style="background:#555;font-size:12px;" onclick="editItem(' + i + ')">编辑</button></div>';
+                html += '</div>';
+            }
+        }
+        
+        html += '<div style="text-align:center;margin-top:15px;"><button class="add-btn" onclick="addItem()">+ 新增</button></div>';
+        list.innerHTML = html;
+    }
+
+    function addItem() {
+        document.getElementById('editIndex').value = '-1';
+        document.getElementById('editCat').value = curCat;
+        document.getElementById('editTitle').value = '';
+        document.getElementById('editDate').value = '';
+        document.getElementById('editPath').value = '';
+        document.getElementById('editContent').value = '';
+        document.getElementById('editOldPath').value = '';
+        document.getElementById('formTitle').textContent = '新增 - ' + curCat;
+        document.getElementById('formBox').classList.add('show');
+        
+        if (curTab !== 'articles' || curCat === '成册文档') {
+            document.getElementById('contentSection').style.display = 'none';
+        } else {
+            document.getElementById('contentSection').style.display = 'block';
+        }
+    }
+
+    function editItem(idx) {
+        var items = [];
+        if (curTab === 'articles') items = data.articles.content.categories[curCat] || [];
+        else if (curTab === 'gallery') items = data.gallery.content[curCat] || [];
+        else items = data.changelog.content.updates || [];
+        
+        var item = items[idx];
+        document.getElementById('editIndex').value = idx;
+        document.getElementById('editCat').value = curCat;
+        document.getElementById('editTitle').value = item.title || '';
+        document.getElementById('editDate').value = item.date || '';
+        document.getElementById('editPath').value = item.path || '';
+        document.getElementById('editOldPath').value = item.path || '';
+        document.getElementById('editContent').value = '';
+        document.getElementById('formTitle').textContent = '编辑 - ' + curCat;
+        document.getElementById('formBox').classList.add('show');
+        
+        if (curTab !== 'articles' || curCat === '成册文档') {
+            document.getElementById('contentSection').style.display = 'none';
+        } else {
+            document.getElementById('contentSection').style.display = 'block';
+            if (item.path && item.path.endsWith('.json')) {
+                fetchArticleContent(item.path);
+            }
+        }
+    }
+
+    function fetchArticleContent(path) {
+        fetch('https://api.github.com/repos/' + REPO + '/contents/' + path + '?ref=' + BRANCH, {
+            headers: { 'Authorization': 'token ' + token }
+        }).then(function(r) { return r.json(); }).then(function(json) {
+            if (json.content) {
+                var content = decodeURIComponent(escape(atob(json.content)));
+                document.getElementById('editContent').value = content;
+                document.getElementById('editContent').setAttribute('data-sha', json.sha);
+            }
+        }).catch(function(err) {
+            showMsg('无法加载文章内容: ' + err.message, 'error');
+        });
+    }
+
+    function cancelEdit() {
+        document.getElementById('formBox').classList.remove('show');
+    }
+
+    function saveItem() {
+        var idx = parseInt(document.getElementById('editIndex').value);
+        var cat = document.getElementById('editCat').value;
+        var title = document.getElementById('editTitle').value.trim();
+        var date = document.getElementById('editDate').value.trim();
+        var path = document.getElementById('editPath').value.trim();
+        var oldPath = document.getElementById('editOldPath').value.trim();
+        var content = document.getElementById('editContent').value.trim();
+        var isNew = idx === -1;
+        
+        if (!title) { showMsg('标题不能为空', 'error'); return; }
+        
+        var items, target;
+        if (curTab === 'articles') { items = data.articles.content.categories[cat]; target = data.articles; }
+        else if (curTab === 'gallery') { items = data.gallery.content[cat]; target = data.gallery; }
+        else { items = data.changelog.content.updates; target = data.changelog; }
+        
+        // 如果是文章且不是成册文档，需要先保存内容文件
+        if (curTab === 'articles' && cat !== '成册文档' && path && path.endsWith('.json') && content) {
+            showMsg('保存文章内容中...', '');
+            var contentSha = document.getElementById('editContent').getAttribute('data-sha') || null;
+            saveArticleFile(path, content, contentSha, function() {
+                // 内容保存成功后，更新 index.json
+                var newItem = { title: title, date: date, path: path };
+                if (isNew) {
+                    items.push(newItem);
+                } else {
+                    items[idx] = newItem;
+                }
+                saveToGitHub(target);
+            });
+        } else {
+            // 不需要保存内容文件
+            var newItem = { title: title, date: date, path: path };
+            if (isNew) {
+                items.push(newItem);
+            } else {
+                items[idx] = newItem;
+            }
+            saveToGitHub(target);
+        }
+    }
+
+    function saveArticleFile(path, content, sha, callback) {
+        var newContent = btoa(unescape(encodeURIComponent(content)));
+        var body = {
+            message: '更新文章: ' + path,
+            content: newContent,
+            branch: BRANCH
+        };
+        if (sha) body.sha = sha;
+        
+        fetch('https://api.github.com/repos/' + REPO + '/contents/' + path, {
+            method: 'PUT',
+            headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        }).then(function(r) { return r.json(); }).then(function(json) {
+            if (json.content) {
+                document.getElementById('editContent').setAttribute('data-sha', json.content.sha);
+                callback();
+            } else {
+                showMsg('保存文章内容失败: ' + (json.message || '未知错误'), 'error');
+            }
+        }).catch(function(err) {
+            showMsg('保存文章内容失败: ' + err.message, 'error');
+        });
+    }
+
+    function deleteItem() {
+        if (!confirm('确定删除？')) return;
+        var idx = parseInt(document.getElementById('editIndex').value);
+        var cat = document.getElementById('editCat').value;
+        
+        var items, target;
+        if (curTab === 'articles') { items = data.articles.content.categories[cat]; target = data.articles; }
+        else if (curTab === 'gallery') { items = data.gallery.content[cat]; target = data.gallery; }
+        else { items = data.changelog.content.updates; target = data.changelog; }
+        
+        items.splice(idx, 1);
+        saveToGitHub(target);
+    }
+
+    function saveToGitHub(target) {
+        showMsg('保存中...', '');
+        var file = curTab === 'articles' ? 'articles/index.json' : curTab === 'gallery' ? 'gallery/index.json' : 'updatelog/index.json';
+        var content = btoa(unescape(encodeURIComponent(JSON.stringify(target.content, null, 4))));
+        
+        fetch('https://api.github.com/repos/' + REPO + '/contents/' + file, {
+            method: 'PUT',
+            headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: '更新', content: content, sha: target.sha, branch: BRANCH })
+        }).then(function(r) { return r.json(); }).then(function(json) {
+            if (json.content) {
+                target.sha = json.content.sha;
+                showMsg('保存成功！', 'success');
+                renderItems();
+                cancelEdit();
+            } else {
+                showMsg(json.message || '保存失败', 'error');
+            }
+        }).catch(function(err) {
+            showMsg(err.message, 'error');
+        });
+    }
+
+    function showMsg(txt, type) {
+        var el = document.getElementById('msg');
+        el.textContent = txt;
+        el.className = type;
+    }
+    </script>
+</body>
+</html>
