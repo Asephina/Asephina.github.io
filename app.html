@@ -145,10 +145,10 @@
                 写下来、记下来、留下来——<br>
                 <b>不联网、不收集、不上传</b>，你的记录只属于你的手机。
             </div>
-            <a class="dl-btn" href="app/Sympnoia-1.0.apk" download>⬇ 下载安装包（APK）</a>
+            <a class="dl-btn" href="app/Sympnoia-1.1.apk" download>⬇ 下载安装包（APK）</a>
             <div class="dl-meta">
-                版本 1.0　·　Android 7.0 及以上　·　约 9.32 MB<br>
-                更新日期：2026-09-26　·　SHA-256：<code>D5B0D3CD…E9FF</code>
+                版本 1.1　·　Android 7.0 及以上　·　约 9.32 MB<br>
+                更新日期：2026-09-26　·　SHA-256：<code>86F7EC8E…78EFFB</code>
             </div>
         </div>
 
@@ -166,8 +166,24 @@
                 <li><b>文档与日记</b>：分类管理、正文编辑与排版，可一键导出 Word 文档留存备份</li>
                 <li><b>番茄钟</b>：前台服务计时，锁屏、切后台都不会中断</li>
                 <li><b>步数统计</b>：读取系统计步传感器，按天记录，无需联网</li>
-                <li><b>数据全在本机</b>：以明文 JSON、图片等文件形式保存在应用专属目录，方便你自己备份与迁移</li>
+                <li><b>数据全在本机</b>：以明文 JSON、图片等文件形式保存，方便你自己备份与迁移</li>
+                <li><b>完整备份与恢复</b>：一键把全部数据（含图片、视频）打包成 zip 导出；换手机或重装后，选中那个 zip 就能恢复</li>
             </ul>
+
+            <h2>备份放在哪里（1.1 起）</h2>
+            <p>
+                所有导出都在<b>应用数据之外</b>的公共目录里，因此<b>卸载应用不会把备份一起删掉</b>：
+            </p>
+            <ul>
+                <li><code>/Documents/Sympnoia/</code>　手动导出：Word 文档 + 数据包 <code>.zip</code>（不限份数）</li>
+                <li><code>/Documents/Sympnoia/auto/</code>　每天自动导出的 Word（滚动保留最近 7 份）</li>
+                <li><code>/Documents/Sympnoia/mirror/</code>　每天覆盖的原始数据镜像（单个 zip，只留最新）</li>
+                <li><code>/Documents/Sympnoia/restore/</code>　从备份恢复前自动留的底（保留最近 3 份）</li>
+            </ul>
+            <div class="tip">
+                换手机时，把 <code>/Documents/Sympnoia/</code> 这个文件夹拷到新机（或先传到网盘），
+                再在新机上用应用内的「花房 · 数据 → 从备份恢复」选中 zip 即可。
+            </div>
 
             <h2>为什么它值得信任</h2>
             <ul>
@@ -182,22 +198,28 @@
 
             <h2>安装步骤</h2>
             <ol>
-                <li>点上面的按钮下载 <code>Sympnoia-1.0.apk</code></li>
+                <li>点上面的按钮下载 <code>Sympnoia-1.1.apk</code></li>
                 <li>在手机「设置 → 安全」里允许<strong>安装未知来源的应用</strong>（不同品牌路径略有差异）</li>
                 <li>打开下载好的 APK 完成安装</li>
                 <li>首次启动后按提示授予「身体活动」权限（用于记步）与通知权限（用于番茄钟提醒）</li>
             </ol>
+            <div class="tip">
+                已经装过 1.0 的话，直接装 1.1 即可<b>覆盖升级</b>（同一个签名），记录不会丢。
+            </div>
 
             <h2>版本与签名</h2>
             <ul>
                 <li>本安装包使用开发者自有证书签名（证书主体：<code>CN=Sympnoia</code>），<b>不是调试签名</b></li>
                 <li>后续版本会沿用同一签名，可直接覆盖安装、数据不丢</li>
-                <li>下载后可自行核对 SHA-256：<code>D5B0D3CD1295BBC71E55D0FDB30D72AFCCE05A684A5F89D1597FD4A07D39E9FF</code></li>
+                <li>安装包 SHA-256：<code>86F7EC8E30110753352375A2FCCA20EE0ED9E7BFF28FA73E59E158ACAF78EFFB</code></li>
+                <li>签名证书 SHA-256 指纹：<code>a832db7f…15ef0d9</code></li>
             </ul>
 
             <div class="warn">
                 <b>⚠️ 注意：</b>本应用暂未上架任何应用市场，仅在此页提供安装包。
-                由于全部数据保存在本机，<b>卸载应用会一并删除所有记录</b>——建议先用应用内的「导出 Word」功能备份。
+                记录本体保存在应用数据目录里，<b>卸载应用会一并删除</b>；
+                但 1.1 起所有备份都写在 <code>/Documents/Sympnoia/</code>，
+                <b>卸载不会带走备份</b>，重装后用「从备份恢复」即可找回。
             </div>
 
             <h2>反馈与联系</h2>
