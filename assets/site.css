@@ -1221,7 +1221,116 @@ html[data-tone="gold"] .gal figcaption::before { background: var(--gold); }
     .tl-item::before { left: -18px; }
 }
 
-/* ============================ 十四、减少动态效果 ============================
+/* ============================ 十四、进门（站点的锁） ============================
+   assets/gate.js 造出来的那块门屏。内容被一条内联样式先遮住，口令对了才放行。
+   ========================================================================== */
+.gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+        radial-gradient(120% 100% at 50% 0%, var(--accent-soft) 0%, transparent 62%),
+        var(--bg);
+    text-align: center;
+}
+
+.gate-box {
+    width: 100%;
+    max-width: 360px;
+    padding: 34px 26px 26px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--panel);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 26px 60px var(--shadow-strong);
+    animation: rise .5s ease-out both;
+}
+
+.gate-mark {
+    color: var(--bloom);
+    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--bloom) 45%, transparent));
+    line-height: 0;
+    margin-bottom: 14px;
+}
+
+.gate-box h1 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: .24em;
+    text-indent: .24em;
+    color: var(--ink);
+}
+
+.gate-sub {
+    margin: 0 0 22px;
+    font-size: 12.5px;
+    line-height: 2;
+    color: var(--ink-faint);
+    letter-spacing: .06em;
+}
+
+.gate-row { display: flex; gap: 8px; }
+
+.gate-in {
+    flex: 1;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: .1em;
+    padding: 11px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-deep);
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s;
+}
+
+.gate-in:focus { border-color: var(--accent); }
+.gate-in::placeholder { color: var(--ink-ghost); letter-spacing: .2em; }
+
+.gate-btn {
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: .12em;
+    padding: 11px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--accent-soft);
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+}
+
+.gate-btn:hover { border-color: var(--accent); }
+.gate-btn:disabled { opacity: .5; cursor: default; }
+
+.gate-err {
+    margin: 12px 0 0;
+    min-height: 1.2em;
+    font-size: 12px;
+    letter-spacing: .06em;
+    color: var(--rose);
+}
+
+.gate-foot {
+    margin: 18px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-faint);
+    font-size: 11.5px;
+    line-height: 1.9;
+    letter-spacing: .06em;
+    color: var(--ink-ghost);
+}
+
+.gate-note { font-size: 12px; color: var(--ink-faint); line-height: 2; }
+
+/* ============================ 十五、减少动态效果 ============================
    系统开了「减弱动态效果」：所有循环动画停掉，只留一帧静态的样子。
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {

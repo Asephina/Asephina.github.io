@@ -93,9 +93,19 @@
             ' 2026　|　<a href="terms.html">使用协议</a>';
     };
 
+    /** 进门：在每一页上挂上站点的锁。门屏会先把内容遮住，口令对了才放行。 */
+    LM.gate = function () {
+        if (document.querySelector('script[data-gate]')) return;
+        var s = document.createElement('script');
+        s.src = 'assets/gate.js';
+        s.setAttribute('data-gate', '1');
+        document.head.appendChild(s);
+    };
+
     /** 把 #head / #foot 的公共部分填上（各页只写自己那一段） */
     LM.shell = function (opts) {
         opts = opts || {};
+        LM.gate();
         LM.topbar();
         LM.tone();
         var f = document.getElementById('foot');
