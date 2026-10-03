@@ -660,6 +660,15 @@ html[data-tone="gold"] .gal figcaption::before { background: var(--gold); }
 
 .core-quote { font-size: 15px; line-height: 2.15; color: var(--ink-soft); margin: 0 auto; max-width: 32em; }
 
+/* 一句自我介绍：比上面那句小、比它暗，像是它小声补的一句 */
+.core-self {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12.5px;
+    letter-spacing: .08em;
+    color: var(--ink-faint);
+}
+
 .core-status {
     display: inline-block;
     margin-top: 26px;

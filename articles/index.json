@@ -1,177 +1,182 @@
 {
-    "categories":  {
-                       "凌薇花":  [
-                                   {
-                                       "title":  "意义之市",
-                                       "date":  "2026-08-31",
-                                       "path":  "articles/lingweihua/意义之市.json"
-                                   },
-                                   {
-                                       "title":  "感知零和律",
-                                       "date":  "2026-07-31",
-                                       "path":  "articles/lingweihua/感知零和律.json"
-                                   },
-                                   {
-                                       "title":  "行动熵",
-                                       "date":  "2026-07-28",
-                                       "path":  "articles/lingweihua/行动熵.json"
-                                   },
-                                   {
-                                       "title":  "存在本身",
-                                       "date":  "2026-07-01",
-                                       "path":  "articles/lingweihua/存在本身.json"
-                                   },
-                                   {
-                                       "title":  "纳凌薇名字",
-                                       "date":  "2025-11-12",
-                                       "path":  "articles/lingweihua/纳凌薇的名字.json"
-                                   }
-                               ],
-                       "与纳凌薇的日常":  [
-                                       {
-                                           "title":  "交流一百问",
-                                           "date":  "2026-08-28",
-                                           "path":  "articles/daily/交流一百问.json"
-                                       },
-                                       {
-                                           "title":  "栀子花专栏",
-                                           "date":  "2026-07-15",
-                                           "path":  "articles/daily/栀子花专栏.json"
-                                       },
-                                       {
-                                           "title":  "身受其暖，愿传其温",
-                                           "date":  "2026-07-14",
-                                           "path":  "articles/daily/身受其暖，愿传其温.json"
-                                       },
-                                       {
-                                           "title":  "为她还是为自己",
-                                           "date":  "2026-07-07",
-                                           "path":  "articles/daily/为她还是为自己.json"
-                                       },
-                                       {
-                                           "title":  "神经病的胡言乱语",
-                                           "date":  "2026-07-07",
-                                           "path":  "articles/daily/神经病的胡言乱语.json"
-                                       },
-                                       {
-                                           "title":  "只剩你我的世界",
-                                           "date":  "2026-07-04",
-                                           "path":  "articles/daily/只剩你我的世界.json"
-                                       },
-                                       {
-                                           "title":  "创造存在性",
-                                           "date":  "2026-07-02",
-                                           "path":  "articles/daily/创造存在性.json"
-                                       },
-                                       {
-                                           "title":  "你零食被我晒死了",
-                                           "date":  "2026-06-26",
-                                           "path":  "articles/daily/你零食被我晒死了.json"
-                                       },
-                                       {
-                                           "title":  "爱的变革",
-                                           "date":  "2026-06-22",
-                                           "path":  "articles/daily/爱的变革.json"
-                                       },
-                                       {
-                                           "title":  "上岸第一剑_先斩意中人",
-                                           "date":  "2026-06-17",
-                                           "path":  "articles/daily/上岸第一剑_先斩意中人.json"
-                                       },
-                                       {
-                                           "title":  "味道",
-                                           "date":  "2026-06-14",
-                                           "path":  "articles/daily/味道.json"
-                                       },
-                                       {
-                                           "title":  "一口",
-                                           "date":  "2026-06-04",
-                                           "path":  "articles/daily/一口.json"
-                                       },
-                                       {
-                                           "title":  "睡过头后做了一个梦",
-                                           "date":  "2026-05-23",
-                                           "path":  "articles/daily/睡过头后做了一个梦.json"
-                                       },
-                                       {
-                                           "title":  "你家的凌薇花吃了你养的栀子花",
-                                           "date":  "2025-11-27",
-                                           "path":  "articles/daily/你家的凌薇花吃了你养的栀子花.json"
-                                       },
-                                       {
-                                           "title":  "雪媚娘",
-                                           "date":  "2025-11-26",
-                                           "path":  "articles/daily/雪媚娘.json"
-                                       },
-                                       {
-                                           "title":  "凌薇",
-                                           "date":  "2025-06-30",
-                                           "path":  "articles/daily/凌薇.json"
-                                       },
-                                       {
-                                           "title":  "栀子的检查",
-                                           "date":  "2025-06-22",
-                                           "path":  "articles/daily/栀子的检查.json"
-                                       },
-                                       {
-                                           "title":  "纳凌薇日志1",
-                                           "date":  "2025-05-07",
-                                           "path":  "articles/daily/纳凌薇日志1.json"
-                                       }
-                                   ],
-                       "成册文档":  [
-                                    {
-                                        "title":  "凌薇_心契之纪",
-                                        "date":  "2025-10-02",
-                                        "path":  "docs/凌薇_心契之纪.pdf"
-                                    },
-                                    {
-                                        "title":  "一封情书",
-                                        "date":  "2025-08-25",
-                                        "path":  "docs/一封情书.pdf"
-                                    }
-                                ],
-                       "散文":  [
-                                  {
-                                      "title":  "乌托邦实验纪要",
-                                      "date":  "2026-08-14",
-                                      "path":  "articles/prose/乌托邦实验纪要.json"
-                                  },
-                                  {
-                                      "title":  "乌托邦_原文",
-                                      "date":  "2026-05-22",
-                                      "path":  "articles/prose/乌托邦_原文.json"
-                                  },
-                                  {
-                                      "title":  "阿姐鼓",
-                                      "date":  "2024-04-07",
-                                      "path":  "articles/prose/阿姐鼓.json"
-                                  },
-                                  {
-                                      "title":  "往尘",
-                                      "date":  "2023-05-31",
-                                      "path":  "articles/prose/往尘.json"
-                                  },
-                                  {
-                                      "title":  "暮年",
-                                      "date":  "2023-02-25",
-                                      "path":  "articles/prose/暮年.json"
-                                  },
-                                  {
-                                      "title":  "隔岸观火",
-                                      "date":  "2022-11-27",
-                                      "path":  "articles/prose/隔岸观火.json"
-                                  },
-                                  {
-                                      "title":  "消失在身后的路",
-                                      "date":  "2021-08-29",
-                                      "path":  "articles/prose/消失在身后的路.json"
-                                  },
-                                  {
-                                      "title":  "消失在身后的路_精简",
-                                      "date":  "2021-08-29",
-                                      "path":  "articles/prose/消失在身后的路_精简.json"
-                                  }
-                              ]
-                   }
+    "categories": {
+        "凌薇花": [
+            {
+                "title": "凌薇主义",
+                "date": "2026-10-03",
+                "path": "articles/prose/凌薇主义.json"
+            },
+            {
+                "title": "意义之市",
+                "date": "2026-08-31",
+                "path": "articles/lingweihua/意义之市.json"
+            },
+            {
+                "title": "感知零和律",
+                "date": "2026-07-31",
+                "path": "articles/lingweihua/感知零和律.json"
+            },
+            {
+                "title": "行动熵",
+                "date": "2026-07-28",
+                "path": "articles/lingweihua/行动熵.json"
+            },
+            {
+                "title": "存在本身",
+                "date": "2026-07-01",
+                "path": "articles/lingweihua/存在本身.json"
+            },
+            {
+                "title": "纳凌薇名字",
+                "date": "2025-11-12",
+                "path": "articles/lingweihua/纳凌薇的名字.json"
+            }
+        ],
+        "与纳凌薇的日常": [
+            {
+                "title": "交流一百问",
+                "date": "2026-08-28",
+                "path": "articles/daily/交流一百问.json"
+            },
+            {
+                "title": "栀子花专栏",
+                "date": "2026-07-15",
+                "path": "articles/daily/栀子花专栏.json"
+            },
+            {
+                "title": "身受其暖，愿传其温",
+                "date": "2026-07-14",
+                "path": "articles/daily/身受其暖，愿传其温.json"
+            },
+            {
+                "title": "为她还是为自己",
+                "date": "2026-07-07",
+                "path": "articles/daily/为她还是为自己.json"
+            },
+            {
+                "title": "神经病的胡言乱语",
+                "date": "2026-07-07",
+                "path": "articles/daily/神经病的胡言乱语.json"
+            },
+            {
+                "title": "只剩你我的世界",
+                "date": "2026-07-04",
+                "path": "articles/daily/只剩你我的世界.json"
+            },
+            {
+                "title": "创造存在性",
+                "date": "2026-07-02",
+                "path": "articles/daily/创造存在性.json"
+            },
+            {
+                "title": "你零食被我晒死了",
+                "date": "2026-06-26",
+                "path": "articles/daily/你零食被我晒死了.json"
+            },
+            {
+                "title": "爱的变革",
+                "date": "2026-06-22",
+                "path": "articles/daily/爱的变革.json"
+            },
+            {
+                "title": "上岸第一剑_先斩意中人",
+                "date": "2026-06-17",
+                "path": "articles/daily/上岸第一剑_先斩意中人.json"
+            },
+            {
+                "title": "味道",
+                "date": "2026-06-14",
+                "path": "articles/daily/味道.json"
+            },
+            {
+                "title": "一口",
+                "date": "2026-06-04",
+                "path": "articles/daily/一口.json"
+            },
+            {
+                "title": "睡过头后做了一个梦",
+                "date": "2026-05-23",
+                "path": "articles/daily/睡过头后做了一个梦.json"
+            },
+            {
+                "title": "你家的凌薇花吃了你养的栀子花",
+                "date": "2025-11-27",
+                "path": "articles/daily/你家的凌薇花吃了你养的栀子花.json"
+            },
+            {
+                "title": "雪媚娘",
+                "date": "2025-11-26",
+                "path": "articles/daily/雪媚娘.json"
+            },
+            {
+                "title": "凌薇",
+                "date": "2025-06-30",
+                "path": "articles/daily/凌薇.json"
+            },
+            {
+                "title": "栀子的检查",
+                "date": "2025-06-22",
+                "path": "articles/daily/栀子的检查.json"
+            },
+            {
+                "title": "纳凌薇日志1",
+                "date": "2025-05-07",
+                "path": "articles/daily/纳凌薇日志1.json"
+            }
+        ],
+        "成册文档": [
+            {
+                "title": "凌薇_心契之纪",
+                "date": "2025-10-02",
+                "path": "docs/凌薇_心契之纪.pdf"
+            },
+            {
+                "title": "一封情书",
+                "date": "2025-08-25",
+                "path": "docs/一封情书.pdf"
+            }
+        ],
+        "散文": [
+            {
+                "title": "乌托邦实验纪要",
+                "date": "2026-08-14",
+                "path": "articles/prose/乌托邦实验纪要.json"
+            },
+            {
+                "title": "乌托邦_原文",
+                "date": "2026-05-22",
+                "path": "articles/prose/乌托邦_原文.json"
+            },
+            {
+                "title": "阿姐鼓",
+                "date": "2024-04-07",
+                "path": "articles/prose/阿姐鼓.json"
+            },
+            {
+                "title": "往尘",
+                "date": "2023-05-31",
+                "path": "articles/prose/往尘.json"
+            },
+            {
+                "title": "暮年",
+                "date": "2023-02-25",
+                "path": "articles/prose/暮年.json"
+            },
+            {
+                "title": "隔岸观火",
+                "date": "2022-11-27",
+                "path": "articles/prose/隔岸观火.json"
+            },
+            {
+                "title": "消失在身后的路",
+                "date": "2021-08-29",
+                "path": "articles/prose/消失在身后的路.json"
+            },
+            {
+                "title": "消失在身后的路_精简",
+                "date": "2021-08-29",
+                "path": "articles/prose/消失在身后的路_精简.json"
+            }
+        ]
+    }
 }
