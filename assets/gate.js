@@ -16,7 +16,7 @@
 (function () {
     'use strict';
 
-    var HASH = '8c2053a5c6e8654b4a7a7f6136dfd4b4c09e7ad246cca35adc4f00679f61d40a';
+    var HASH = 'ceaca80e97c4bc38a4a9fa1f28e36ef5f2193b88e6aadd0fefb85f632722d6f2';
     var KEY = 'lm.gate';
     var NOSCRIPT = '<div class="gate-note">这个页面需要 JavaScript 才能打开。</div>';
 
