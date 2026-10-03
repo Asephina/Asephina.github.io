@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sympnoia 应用隐私政策 · 纳凌薇</title>
+    <meta name="description" content="Sympnoia（安卓应用）隐私政策：数据只保存在你的手机里。除你自愿开启、且由你自行配置接口的 AI 对话外，不收集、不上传任何个人信息。">
+    <link rel="stylesheet" href="assets/site.css?v=v7">
+    <style>
+        * { box-sizing: border-box; }
+
+        /* 背景交给 assets/life.js 的 canvas，这里不再自己铺渐变 */
+        body {
+            background: transparent;
+            min-height: 100vh;
+            font-family: var(--font);
+            margin: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .card {
+            position: relative;
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 34px 30px 30px;
+            box-shadow: 0 24px 55px var(--shadow);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+            opacity: .5;
+        }
+
+        h1 {
+            color: var(--ink);
+            font-size: clamp(19px, 4.2vw, 26px);
+            text-align: center;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 18px;
+            margin: 0 0 20px;
+            letter-spacing: .1em;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .meta {
+            text-align: center;
+            color: var(--ink-faint);
+            font-size: 12.5px;
+            margin-bottom: 24px;
+            line-height: 1.95;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13.5px;
+            letter-spacing: .06em;
+        }
+
+        .back-link:hover { color: var(--bloom); }
+
+        .content {
+            color: var(--ink-soft);
+            font-size: 14px;
+            line-height: 2.05;
+        }
+
+        .content h2 {
+            color: var(--ink);
+            font-size: 15.5px;
+            letter-spacing: .1em;
+            font-weight: 500;
+            margin: 30px 0 10px;
+        }
+
+        .content h3 {
+            color: var(--ink);
+            font-size: 14px;
+            font-weight: 500;
+            margin: 20px 0 8px;
+        }
+
+        .content ul, .content ol { padding-left: 1.4rem; margin: .6rem 0; }
+        .content li { margin: .35rem 0; }
+        .content strong { color: var(--ink); }
+        .content a { color: var(--accent); }
+        .content a:hover { color: var(--bloom); }
+        .content .highlight { color: var(--bloom); }
+
+        .content .warning {
+            background: color-mix(in srgb, var(--rose) 12%, transparent);
+            border-left: 2px solid var(--rose);
+            padding: 14px 18px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 22px 0;
+        }
+
+        .content .warning strong { color: var(--rose); }
+
+        .content .tip {
+            background: var(--accent-soft);
+            border-left: 2px solid var(--accent);
+            padding: 14px 18px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 22px 0;
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px;
+            font-size: 12.5px;
+        }
+
+        .content th, .content td {
+            border: 1px solid var(--line);
+            padding: 9px 11px;
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.85;
+        }
+
+        .content th {
+            background: var(--accent-soft);
+            color: var(--ink);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .content td { color: var(--ink-soft); }
+
+        .content code {
+            background: var(--line-faint);
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-size: .88em;
+            color: var(--gold);
+        }
+
+        @media (max-width: 620px) {
+            .container { padding: 18px 14px 48px; }
+            .card { padding: 24px 18px 22px; }
+            .content { font-size: 13.5px; }
+            .content th, .content td { padding: 7px 8px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+    <div class="container">
+    <div class="card">
+        <a href="index.html" class="back-link">← 返回主页</a>
+        <h1>Sympnoia 应用隐私政策</h1>
+        <div class="meta">
+            适用应用：Sympnoia（安卓应用 / 桌面显示名）　包名：com.example.asephina　版本：1.8.7<br>
+            开发者：Sympnoia 应用作者（个人开发者）　生效日期：2026 年 9 月 25 日　更新日期：2026 年 10 月 3 日
+        </div>
+
+        <div class="content">
+
+            <div class="tip">
+                <strong>一句话说明：</strong>Sympnoia 是一个以<strong>本地</strong>为主的个人记录应用。
+                你在应用里写下的所有内容都只保存在你自己的手机上，开发者没有服务器，
+                <strong>无法看到、也无法取得</strong>任何一条数据；应用没有账号、没有广告、没有统计埋点、没有第三方 SDK。
+                从 <strong>1.2 版</strong>起，应用增加了一个<strong>可选的</strong>联网功能——底栏「对话」一栏里的 AI 聊天：
+                接口地址与密钥<strong>全部由你自己填写</strong>，只有你在那一栏里主动发出的内容，才会送达
+                <strong>你自行选择的</strong>那家模型服务商。<strong>不使用该功能时，应用不会发出任何网络请求。</strong>
+            </div>
+
+            <h2>一、引言与适用范围</h2>
+            <p>1. 本隐私政策（以下简称“本政策”）适用于由 <strong>Sympnoia 应用作者</strong>（以下简称“我们”或“开发者”）提供的安卓应用
+                <strong>Sympnoia</strong>（包名 <code>com.example.asephina</code>，以下简称“本应用”）。<br>
+                <span style="color:#b9b3c9;font-size:0.92em;">说明：应用的桌面显示名为 <strong>Sympnoia</strong>；为保持历史数据兼容，应用内部名称与手机本地的数据目录仍沿用早期的 <strong>Asephina</strong>，因此下文出现的路径（如 <code>files/Asephina/</code>）均以 <code>Asephina</code> 命名。</span></p>
+            <p>2. 我们深知个人信息对你的重要性，本政策说明本应用会处理哪些信息、如何使用与保存、以及你享有哪些权利。
+               请你在使用本应用前仔细阅读并充分理解本政策。</p>
+            <p>3. 本应用为个人开发、免费提供的记录类工具，不设置用户账号，也不提供任何由开发者运营的在线服务。
+                <span style="color:#b9b3c9;font-size:0.92em;">（应用内有一个可选的 AI 对话功能，它连接的是<strong>你自己填写的</strong>第三方模型接口，
+                不是开发者提供的服务，详见下文第二节第 5 条。）</span></p>
+
+            <h2>二、我们如何收集和使用信息</h2>
+            <p>1. <strong>本应用没有自己的服务器，也不收集任何个人信息。</strong>
+                除下文第 5 条所述的可选 AI 对话外，应用不会把你的任何数据发送到任何地方。
+                <span style="color:#b9b3c9;font-size:0.92em;">（说明：1.2 版之前的版本未申请任何网络权限；自 1.2 版起，
+                为了实现可选的 AI 对话功能，应用的清单文件中申请了 <code>INTERNET</code> 权限。
+                该权限仅被用于你在「对话」一栏中主动发起的请求，详见第三节权限表。）</span></p>
+            <p>2. 本应用不会读取或收集以下信息：</p>
+            <ul>
+                <li>姓名、手机号、邮箱、身份证号等身份信息；</li>
+                <li>位置信息、通讯录、短信、通话记录；</li>
+                <li>设备标识符（如 IMEI、Android ID、广告标识符 OAID/IDFA 等）；</li>
+                <li>已安装应用列表、剪贴板内容、键盘输入记录；</li>
+                <li>相册中的照片与视频（只有在你主动选择某一张/某个文件时，才会读取你所选择的那一个文件）；</li>
+                <li>任何用于广告、画像、统计分析的浏览行为或使用行为数据。</li>
+            </ul>
+            <p>3. 本应用仅在你主动操作时，处理以下几类<strong>你自己产生的数据</strong>。
+                除下表中“AI 对话内容”一项会随你的请求发送给<strong>你自己填写的</strong>模型服务商之外，
+                其余数据<strong>全部只保存在你的手机本地</strong>：</p>
+            <table>
+                <tr><th>数据种类</th><th>产生方式</th><th>保存位置与用途</th></tr>
+                <tr>
+                    <td>你记录的内容<br>（行迹、文章、日记、心情、写下/呼唤的名字、刮刮乐记录）</td>
+                    <td>由你在应用内主动输入、编辑</td>
+                    <td>保存在本应用专属目录 <code>Android/data/com.example.asephina/files/Asephina/</code>，用于在本机展示、统计与导出</td>
+                </tr>
+                <tr>
+                    <td>运动步数</td>
+                    <td>你开启“自动记录”后，由系统计步传感器读取</td>
+                    <td>只把步数写入本机当天的数据文件，用于换算距离、卡路里与统计图表</td>
+                </tr>
+                <tr>
+                    <td>图片 / 视频</td>
+                    <td>你在写文章或日记时主动从系统相册选择</td>
+                    <td>被你选中的文件会被复制一份到本应用专属目录，仅供文内插图使用</td>
+                </tr>
+                <tr>
+                    <td>导出的备份文件<br>（Word 文档 / 数据包 .zip / 数据镜像）</td>
+                    <td>你点击“导出”时主动生成，或每天首次打开时自动生成</td>
+                    <td>生成在你指定的本机公共目录（如 <code>Documents/Sympnoia</code>），
+                        位于应用数据之外，因此卸载本应用不会删除备份，用于你自己留存与迁移</td>
+                </tr>
+                <tr>
+                    <td>提醒通知</td>
+                    <td>番茄钟倒计时、计步常驻通知</td>
+                    <td>仅在本机通知栏显示，不含任何个人信息，也不会上传</td>
+                </tr>
+                <tr>
+                    <td>AI 对话内容<br>（你发送的消息与模型回复）</td>
+                    <td>你在底栏“对话”一栏里主动输入并点“发送”时，或者（若你没关掉）超过约 6 小时没开口后她主动问候的那一次</td>
+                    <td>保存在本机 <code>.../files/Asephina/ai/sessions.json</code> 与
+                        <code>.../files/Asephina/ai/sessions/</code>，用于在本机接着聊；应用内自动总结的长期记忆另存于
+                        <code>ai/memory/</code>；这些内容会随你的请求，发送给<strong>你自己填写的</strong>
+                        那家模型服务商（见下文第 5 条）</td>
+                </tr>
+                <tr>
+                    <td>AI 接口配置与密钥<br>（Base URL / API Key / 模型名）</td>
+                    <td>你在“AI 设置”里手动填写</td>
+                    <td>只保存在本机 <code>.../files/Asephina/ai_key.json</code>；
+                        <strong>被特意排除在“导出数据包 / 数据镜像 / 恢复留底”之外</strong>，
+                        不会随备份文件落到公共目录，也不会在恢复别人的备份时被覆盖</td>
+                </tr>
+                <tr>
+                    <td>AI 人设卡</td>
+                    <td>你在“AI 设置”里创建、编辑或导入</td>
+                    <td>保存在本机 <code>.../files/Asephina/ai/personas.json</code>；
+                        由你主动导出时生成的文件<strong>不含 API Key</strong>，可以安全地分享给别人</td>
+                </tr>
+                <tr>
+                    <td>AI 对话记录</td>
+                    <td>你在“对话”一栏里的每一次发言</td>
+                    <td>按角色、按对话段分别保存在本机
+                        <code>.../files/Asephina/ai/sessions/</code> 下；可以逐段改名或删除</td>
+                </tr>
+                <tr>
+                    <td>头像图片</td>
+                    <td>你主动从相册选择“我的头像”或某个角色的头像时</td>
+                    <td>选中的图片会被裁成方图、复制到本机
+                        <code>.../files/Asephina/ai/avatars/</code>；<strong>不会上传</strong>，
+                        设置里可随时清除</td>
+                </tr>
+                <tr>
+                    <td>剪贴板</td>
+                    <td>你点击“复制路径”时</td>
+                    <td>只把一段本机文件夹路径<strong>写入</strong>剪贴板；本应用<strong>不会读取</strong>剪贴板中的任何内容</td>
+                </tr>
+            </table>
+            <p>4. 本应用<strong>不涉及</strong>：用户注册与登录、在线支付、广告投放、消息推送（服务端推送）、
+               数据统计分析、社交分享、云端同步。<strong>但请注意：</strong>下文第 5 条所述的 AI 对话功能，
+               会把你在该功能中主动发送的内容交给<strong>你自行选择的第三方模型服务商</strong>处理——
+               这是本应用唯一会把数据交给你以外第三方的功能，且完全由你主动开启。</p>
+            <p>5. <strong>关于「对话」（AI 聊天）功能的数据流向：</strong></p>
+            <ul>
+                <li>只有你在底栏“对话”一栏里主动输入并点击“发送”时，应用才会发起一次网络请求；</li>
+                <li>此外还有一个<strong>可以关掉的「主动问候」</strong>：若你已经在对话里说过话、之后超过约 6 小时
+                    没有再开口，应用会在你正打开着对话页时自行发起一次请求，让她先说一句（长时间不回则按 12 / 24 / 48 小时
+                    递增，累计至多 5 次）。它<strong>不会在应用关闭时唤醒</strong>，也不使用任何消息推送；
+                    你可以在“AI 设置 → 主动问候”里按下「别再问」永久关掉，关掉后应用不会再自行发起任何请求；</li>
+                <li>请求发往的地址、使用的密钥与模型，<strong>全部由你在“AI 设置”中自行填写</strong>。
+                    应用内置的服务商预设只是把常用地址填好，其中<strong>不包含任何由开发者提供的密钥，也不存在开发者的中转服务器</strong>；</li>
+                <li>随请求发送出去的内容包括：该人设卡的设定文本（角色设定）、你填写的“全局附加指令”、
+                    现在的日期时间与节日节气、你设定的最近若干轮对话记录，以及应用内自动总结的长期记忆；</li>
+                <li>这些内容会<strong>直接送达你所选择的那家模型服务商</strong>，由其按照它自己的隐私政策处理。
+                    开发者不参与、不经手、不保存、也无法获取这些内容；</li>
+                <li><strong>另外还有一个可选的天气查询：</strong>如果你在“AI 设置 → 日常信息”里填写了城市，
+                    应用会每隔约半小时向公开天气服务 <code>open-meteo.com</code> 查询该城市的天气与温度
+                    （该服务不需要账号与密钥，也不会收到任何身份信息，只会收到你填的那个地点的坐标）。
+                    <strong>不填城市，应用就完全不会访问它</strong>；</li>
+                <li>如果你不打开“对话”一栏，应用不会发出任何网络请求（天气查询与上面的主动问候，
+                    也只在应用正打开着对话页时才可能触发）。</li>
+            </ul>
+
+            <h2>三、应用申请的权限及用途</h2>
+            <p>本应用申请的权限全部用于实现你可见的功能；除“身体活动”权限外，其余均为普通权限。
+               你可以随时在系统设置中关闭这些权限，关闭后相关功能不可用，但<strong>不影响其余功能</strong>。</p>
+            <table>
+                <tr><th>权限</th><th>用途</th><th>拒绝后的影响</th></tr>
+                <tr>
+                    <td>身体活动<br><code>ACTIVITY_RECOGNITION</code></td>
+                    <td>读取系统计步传感器，记录每日步数</td>
+                    <td>无法自动记录步数；仍可在运动页手动补记</td>
+                </tr>
+                <tr>
+                    <td><code>POST_NOTIFICATIONS</code></td>
+                    <td>显示番茄钟倒计时与计步常驻通知</td>
+                    <td>收不到提醒通知；计时与记录本身不受影响</td>
+                </tr>
+                <tr>
+                    <td><code>FOREGROUND_SERVICE</code><br><code>FOREGROUND_SERVICE_HEALTH</code></td>
+                    <td>在你开启自动记步后，用前台服务持续累计步数（状态栏会有常驻通知）</td>
+                    <td>应用退到后台时无法持续记步</td>
+                </tr>
+                <tr>
+                    <td><code>FOREGROUND_SERVICE_SPECIAL_USE</code></td>
+                    <td>番茄钟倒计时在应用关闭后继续计时</td>
+                    <td>关闭应用后计时会中断</td>
+                </tr>
+                <tr>
+                    <td><code>RECEIVE_BOOT_COMPLETED</code></td>
+                    <td>手机重启后，恢复你此前开启的自动记步</td>
+                    <td>重启后需要手动重新开启自动记步</td>
+                </tr>
+                <tr>
+                    <td><code>VIBRATE</code></td>
+                    <td>番茄钟结束时震动提醒</td>
+                    <td>只能靠声音或画面提醒</td>
+                </tr>
+                <tr>
+                    <td><code>INTERNET</code><br><span style="font-size:0.9em;color:#b9b3c9;">（1.2 版新增）</span></td>
+                    <td>仅用于“对话”一栏里的 AI 聊天：向你<strong>自行填写</strong>的模型接口发送请求、接收回复</td>
+                    <td>不影响其余任何功能；不打开“对话”一栏时，该权限不会被使用</td>
+                </tr>
+            </table>
+            <p>本应用<strong>不申请</strong>相机、麦克风、位置、通讯录、短信、电话、读取全部相册/文件存储等敏感权限。</p>
+            <p><span style="color:#b9b3c9;font-size:0.92em;">另：自 1.2 版起，应用内附带一份网络安全配置，
+                用于允许 <code>http://</code> 明文地址——这是为了方便你把接口指向<strong>自己电脑或局域网内</strong>的本地模型。
+                连接公网服务时请使用 <code>https://</code>；若你只使用云端接口，也可在系统层面把该地址规则收紧。</span></p>
+
+            <h2>四、信息的存储与安全</h2>
+            <p>1. <strong>存储位置：</strong>全部数据保存在你手机中本应用的专属目录
+                （<code>Android/data/com.example.asephina/files/Asephina/</code>），并以明文 JSON、图片、视频等文件形式存在，方便你随时自行备份与迁移。</p>
+            <p>2. <strong>存储期限：</strong>数据一直保存在你的手机上，直到你主动删除或卸载本应用为止。我们不做任何异地留存。</p>
+            <p>3. <strong>安全措施：</strong>本应用不设账号，开发者也不持有你的任何数据，因此不存在开发者侧的数据泄露风险。
+               数据的安全性主要取决于你手机本身的安全状况（锁屏密码、系统更新、是否安装来源不明的应用等），
+               请你妥善保管自己的设备。<br>
+                <span style="color:#b9b3c9;font-size:0.92em;">关于 AI 对话：API 密钥以明文保存在应用专属目录中，
+                系统层面其它应用无法读取，但取得已解锁手机的人可以看到它，请像保管密码一样保管你的手机；
+                如果你把接口地址填成 <code>http://</code>（常见于连接自己电脑上的本地模型），
+                请求内容在该网络中为明文传输，请只在可信网络中使用。</span></p>
+            <p>4. <strong>关于系统备份：</strong>安卓系统自身提供“备份与恢复”功能。
+               如果你在系统或手机厂商的云服务中开启了应用数据备份，本应用的本地数据可能会随系统备份一并被备份到
+               <strong>你自己的</strong>云账号中。该行为由操作系统与你的账号设置控制，我们无法访问、也无法干预；
+               你可以在系统设置中关闭该备份。</p>
+            <div class="tip">
+                <strong>提示：</strong>由于记录本体完全在本机，<strong>卸载本应用会同时删除这些数据</strong>。
+                如需保留，请在应用内使用“<strong>导出数据包（.zip）</strong>”做一份完整备份，
+                或使用“导出 Word 文档”留存可读版本。
+                这些备份都写在应用数据之外的 <code>Documents/Sympnoia</code> 目录里，
+                <strong>卸载本应用不会删除备份</strong>，重装后用“从备份恢复”即可找回。
+            </div>
+
+            <h2>五、信息的共享、转让与公开披露</h2>
+            <p>1. <strong>我们不会共享、转让或公开披露你的任何信息</strong>，因为我们从技术上就无法获取这些信息。</p>
+            <p>2. 本应用不接入任何第三方 SDK；不接入广告联盟；不做数据统计分析；不与任何第三方交换数据。</p>
+            <p>3. <strong>唯一会把数据交给你以外第三方的功能是「对话」（AI 聊天）：</strong>
+                你在该功能中主动发送的内容，会送达你在设置里<strong>自行填写</strong>的模型服务商，
+                由该服务商依其自身政策处理。开发者在这里只是一个过路的，
+                数据由你与该服务商之间直接传输——开发者不经手、不保存、无法获取。</p>
+            <p>4. 唯一例外：若你主动使用“导出 Word 文档”功能并把文件发送给他人，或主动复制路径分享，这属于你自主决定的行为，由你自行承担相应后果。</p>
+            <p>5. 如依据法律法规、司法或行政机关的强制要求需要提供数据，由于我们并不持有你的数据，客观上无法提供。</p>
+
+            <h2>六、你的权利</h2>
+            <p>依据《中华人民共和国个人信息保护法》等法律法规，你对本应用中的信息享有以下权利，且都可以<strong>直接在你的手机上完成</strong>：</p>
+            <ul>
+                <li><strong>查阅与修改：</strong>在应用内随时查看、编辑你记录的任何内容；</li>
+                <li><strong>删除：</strong>在应用内删除单条记录、整篇文档，或删除分类文件夹；</li>
+                <li><strong>导出与迁移：</strong>通过“导出数据包（.zip）”做完整备份，或用“导出 Word 文档”留存可读版本；</li>
+                <li><strong>撤回授权：</strong>在系统设置中关闭身体活动、通知等权限；</li>
+                <li><strong>彻底清除：</strong>卸载本应用即删除应用目录下的全部数据（在此之前建议先备份）。</li>
+            </ul>
+
+            <h2>七、未成年人保护</h2>
+            <p>1. 本应用为个人记录工具，不面向未成年人设计，也不会有针对性地收集未成年人的个人信息。</p>
+            <p>2. 若你是不满 14 周岁的儿童，请在监护人的陪同下阅读本政策，并在取得监护人同意后使用本应用。</p>
+            <p>3. 由于本应用的数据保存在本机，未成年人在本机记录的内容同样只保存在本机；
+                请在监护人指导下使用「对话」等联网功能，并注意模型生成的内容不一定准确。</p>
+
+            <h2>八、本政策的更新</h2>
+            <p>1. 若本应用的功能发生变化，我们会同步更新本政策，并在本页面公布最新版本与更新日期。
+                <span style="color:#b9b3c9;font-size:0.92em;">（最近一次：2026 年 9 月 27 日，
+                新增可选的「对话」（AI 聊天）功能，并补充相应的 <code>INTERNET</code> 权限与数据流向说明。）</span></p>
+            <p>2. 涉及你权利的重大变更，我们会在应用内或本页面以显著方式提示。</p>
+            <p>3. 你继续使用本应用，即表示你接受更新后的本政策。</p>
+
+            <h2>九、联系我们</h2>
+            <p>如果你对本政策或本应用有任何疑问、意见或投诉，可以通过以下方式联系开发者：</p>
+            <p style="background: rgba(255,255,255,0.05); padding: 0.8rem 1.2rem; border-radius: 12px; border-left: 3px solid #a18cd1;">
+                📧 asephina.love@outlook.com
+            </p>
+            <p style="font-size:0.85rem; color:#8882b8; margin-top:0.5rem;">
+                我们会在收到邮件后 7 个工作日内予以回复。
+            </p>
+
+            <div class="warning">
+                <strong>注意：重要提示：</strong>若你删除本应用，应用内的记录会一并被删除且无法恢复。
+                请在卸载前使用“<strong>导出数据包（.zip）</strong>”做一份完整备份。
+                备份文件位于应用数据之外的 <code>Documents/Sympnoia/</code>，
+                <strong>卸载不会删除它们</strong>；重装后选择“从备份恢复”即可找回。
+            </div>
+
+            <p style="font-size:0.85rem; color:#8882b8;">
+                本政策自 2026 年 9 月 25 日起生效，最近更新于 2026 年 9 月 27 日。若本政策的中文版本与其他语言版本存在不一致，以中文版本为准。
+            </p>
+
+        </div>
+</div>
+</div>
+
+<div id="foot"></div>
+<script src="assets/site.js?v=v7"></script>
+<script src="assets/life.js?v=v7"></script>
+<script>LM.shell();</script>
+</body>
+</html>

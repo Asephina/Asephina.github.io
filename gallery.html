@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>画廊 · 创造存在性 · 纳凌薇</title>
+<meta name="description" content="纳凌薇的样子：约稿、溶图、像素画，以及一些画。">
+<link rel="stylesheet" href="assets/site.css?v=v7">
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="wrap page">
+
+  <div class="page-head">
+    <h1>画廊</h1>
+    <p>她被人画下来、也被人看见的样子。</p>
+  </div>
+
+  <div class="page-rule"></div>
+
+  <div id="featWrap"></div>
+  <h2 class="sec" id="othersHead" style="display:none;">其余的画</h2>
+  <div class="gal" id="others"></div>
+
+</div>
+
+<div id="foot"></div>
+<script src="assets/site.js?v=v7"></script>
+<script src="assets/life.js?v=v7"></script>
+<script>
+LM.shell();
+
+LM.json('gallery/index.json').then(function (j) {
+    if (!j) {
+        document.getElementById('others').innerHTML = '<div class="empty">画廊目录读不到。</div>';
+        return;
+    }
+    var feat = j.featured || [], others = j.others || [];
+
+    if (feat.length) {
+        // 第一张跨两格，当作这一组的画眼
+        document.getElementById('featWrap').innerHTML =
+            '<h2 class="sec">她</h2><div class="gal">' +
+            feat.map(function (o, i) { return cell(o, i === 0); }).join('') + '</div>';
+    }
+    if (others.length) {
+        document.getElementById('othersHead').style.display = '';
+        document.getElementById('others').innerHTML = others.map(function (o) { return cell(o); }).join('');
+    }
+    document.querySelectorAll('.gal img').forEach(function (im) {
+        im.onclick = function () { window.open(im.src, '_blank'); };
+        im.style.cursor = 'zoom-in';
+    });
+    if (LM.tone) LM.tone();
+});
+
+function cell(o, lead) {
+    return '<figure' + (lead ? ' class="lead"' : '') + '><img src="' + LM.esc(o.src) +
+        '" alt="' + LM.esc(o.title || '') + '" loading="lazy"><figcaption>' +
+        LM.esc(o.title || '') + '</figcaption></figure>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sympnoia · 应用介绍与下载</title>
+    <meta name="description" content="Sympnoia —— 以「行动熵」记录生活的安卓应用。数据只保存在你的手机里；除你自愿开启的 AI 对话外，不收集、不上传。">
+    <link rel="stylesheet" href="assets/site.css?v=v7">
+    <style>
+        * { box-sizing: border-box; }
+
+        /* 背景交给 assets/life.js 的 canvas，这里不再自己铺渐变 */
+        body {
+            background: transparent;
+            min-height: 100vh;
+            margin: 0;
+            font-family: var(--font);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .card {
+            position: relative;
+            background: var(--panel);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 34px 30px 28px;
+            box-shadow: 0 24px 55px var(--shadow);
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+            opacity: .5;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13.5px;
+            letter-spacing: .06em;
+        }
+
+        .back-link:hover { color: var(--bloom); }
+
+        h1 {
+            color: var(--ink);
+            font-size: clamp(20px, 4.6vw, 28px);
+            text-align: center;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 16px;
+            margin: 0 0 8px;
+            letter-spacing: .1em;
+            font-weight: 500;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--ink-faint);
+            font-size: 13px;
+            margin-bottom: 22px;
+            letter-spacing: .06em;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 22px 18px;
+            border-radius: var(--radius);
+            background: var(--accent-soft);
+            border: 1px solid var(--line);
+            margin-bottom: 26px;
+        }
+
+        .hero .tagline {
+            color: var(--ink-soft);
+            font-size: 13.5px;
+            line-height: 2;
+            margin-bottom: 16px;
+        }
+
+        .hero .tagline b { color: var(--ink); }
+
+        .dl-btn {
+            display: inline-block;
+            padding: 13px 28px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--bloom) 100%);
+            color: #12101f;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-decoration: none;
+            box-shadow: 0 10px 26px var(--shadow);
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .dl-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 32px var(--shadow-strong); }
+
+        .dl-meta {
+            margin-top: 14px;
+            font-size: 12px;
+            line-height: 2;
+            color: var(--ink-faint);
+            letter-spacing: .04em;
+        }
+
+        .dl-meta code {
+            background: var(--line-faint);
+            padding: 1px 6px;
+            border-radius: 6px;
+            color: var(--gold);
+            font-size: .9em;
+        }
+
+        .content { color: var(--ink-soft); font-size: 14px; line-height: 2.05; }
+
+        .content h2 {
+            color: var(--ink);
+            font-size: 15.5px;
+            letter-spacing: .1em;
+            font-weight: 500;
+            margin: 30px 0 10px;
+        }
+
+        .content h3 { color: var(--ink); font-size: 14px; font-weight: 500; margin: 20px 0 8px; }
+        .content ul, .content ol { padding-left: 1.4rem; margin: .6rem 0; }
+        .content li { margin: .35rem 0; }
+        .content strong { color: var(--ink); }
+        .content a { color: var(--accent); }
+        .content a:hover { color: var(--bloom); }
+        .content code {
+            background: var(--line-faint);
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-size: .88em;
+            color: var(--gold);
+        }
+
+        .content table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 12.5px; }
+        .content th, .content td {
+            border: 1px solid var(--line);
+            padding: 9px 11px;
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.85;
+        }
+        .content th { background: var(--accent-soft); color: var(--ink); font-weight: 500; }
+
+        @media (max-width: 620px) {
+            .container { padding: 18px 14px 48px; }
+            .card { padding: 24px 18px 22px; }
+            .content { font-size: 13.5px; }
+        }
+    </style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+    <div class="container">
+        <div class="card">
+        <a href="index.html" class="back-link">← 返回主页</a>
+        <h1>Sympnoia</h1>
+        <div class="subtitle">一个可以「属于某个人」的本地记录应用</div>
+
+        <div class="hero">
+            <div class="tagline">
+                写下来、记下来、留下来——<br>
+                <b>数据只属于你的手机</b>：除你自愿开启的 AI 对话外，不收集、不上传。
+            </div>
+            <a class="dl-btn" href="app/Sympnoia-1.8.7.apk" download>下载安装包（APK）</a>
+            <div class="dl-meta">
+                版本 1.8.7　·　Android 7.0 及以上　·　约 9.63 MB<br>
+                更新日期：2026-09-29　·　SHA-256：<code>D673353D…36ACEF272</code>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <h2>它是什么</h2>
+            <p>
+                Sympnoia（希腊语 σύμπνοια，「同息」——一同呼吸、气息相通）是一个可以
+                <b>「属于某个人」</b>的本地记录工具。桌面显示名为 Sympnoia，
+                应用内部名称与本地数据目录沿用早期的 <b>Asephina</b>。
+            </p>
+
+            <h2>主要功能</h2>
+            <ul>
+                <li><b>行迹 · 文章 · 日记 · 心情 · 运动</b>：五类记录折算成同一个量纲「行动熵」，长成一朵花、一条螺旋、一条河</li>
+                <li><b>文档与日记</b>：分类管理、正文编辑与排版，可一键导出 Word 文档留存备份</li>
+                <li><b>番茄钟</b>：前台服务计时，锁屏、切后台都不会中断</li>
+                <li><b>步数统计</b>：读取系统计步传感器，按天记录，无需联网</li>
+                <li><b>凌薇 AI 对话（1.2 新增）</b>：接上你自己选的模型接口，就能和「她」说话；人设卡可以自己写，也可以导入别人分享的</li>
+                <li><b>多段对话 · 自定义头像（1.3.2 新增）</b>：一个角色可以有很多段对话，自动命名、可改名、可删除；你和她的头像都能自己传</li>
+                <li><b>数据全在本机</b>：以明文 JSON、图片等文件形式保存，方便你自己备份与迁移</li>
+                <li><b>完整备份与恢复</b>：一键把全部数据（含图片、视频）打包成 zip 导出；换手机或重装后，选中那个 zip 就能恢复</li>
+            </ul>
+
+            <h2>凌薇 AI 对话（1.2 起 · 1.4.3 扩充）</h2>
+            <p>
+                底栏的第三栏「对话」是一个可以自定义的 AI 聊天界面。它本身<b>不自带任何模型</b>——
+                你把任意一家 <b>OpenAI 兼容接口</b>的地址、密钥与模型名填进「AI 设置」，连接就通了。
+                内置了二十来家服务商的地址预设（DeepSeek / 通义千问 / Kimi / 智谱 GLM / 豆包 /
+                腾讯混元 / 百度文心 / 讯飞星火 / MiniMax / 阶跃星辰 / 硅基流动 / ChatGPT / Claude /
+                Gemini / Grok / Mistral / Groq / Together / OpenRouter / 本地 Ollama / LM Studio），
+                点一下自动填好，密钥由你自己去服务商那里申请。
+            </p>
+            <ul>
+                <li><b>默认人设</b>：内置一位「纳凌薇」，点「用」就能开始说话。她的设定写在程序内部、
+                    不在界面上展示也不可修改，只留主题色、称呼与头像三项给你调。</li>
+                <li><b>人设卡</b>：自己建的角色按「任务 / 角色 / 外表 / 经历 / 性格 / 喜好 / 输出示例 / 备注」
+                    分节填写，另有记忆片段与开场白。可以建很多张，换一张卡就换一个人；
+                    导出的卡片<b>不含任何密钥</b>，可以直接发给别人。</li>
+                <li><b>多段对话</b>：一个角色名下可以有很多段对话，自动按第一句话命名，
+                    可以改名、可以单独删掉某一段，像聊天软件那样翻。</li>
+                <li><b>自定义头像 · 图片 · 表情包（1.4.3 扩充）</b>：你和她的头像都能从相册选、裁成方图；
+                    输入框左边的「＋」可以发照片，也可以收藏表情包、点一下直接发 ——
+                    能不能真看见图片取决于你用的模型（设置里有「能看图」开关）。</li>
+                <li><b>把记录分享给她</b>：行迹、文章、日记、心情的每一条以及运动那一页都带分享按钮 ——
+                    选一段对话，那条记录就作为你的发言发进去（对话里显示成一张两行的小卡片，
+                    不会把整篇正文铺满屏幕），她按人设回应你。<b>几千字的文章也不会被截断。</b></li>
+                <li><b>她知道现在几点了</b>：每次说话前都会带上真实的时间、星期、时段、
+                    节日节气与纪念日；填一次城市后还会带上天气与温度。还有一个睡觉时段滑块，
+                    这个时段里她不会主动开口，半夜你去找她也会先关心一句而不是催你睡。</li>
+                <li><b>她会自己记住（1.3.6 增强）</b>：每聊够 8 条消息（分几次聊也算），她把对话里值得
+                    长期记住的事总结成短句存下来；条目能自己改、自己删、自己加，多了会自动折叠，
+                    攒得太多还会自己精简一遍。</li>
+                <li><b>她可以连着发好几条（1.3.4 新增）</b>：一次想说的不止一句时，她会一条一条地发出来，
+                    一个气泡接一个气泡，而不是把好几句挤成一大段；每条长短也不一样 ——
+                    该说细的长一点，该应一声的就一两个词。回复的停顿与条与条之间的间隔都能自己调。</li>
+                <li><b>人设卡可以填性别（1.3.3 新增）</b>：男 / 女 / 不方便，决定界面上称呼这个角色时用
+                    <b>他 / 她 / ta</b>。AI 之外的地方跟着「自定义设置」里的称呼走，AI 设置页与对话页
+                    跟着当前人设卡走；两边对不上时统一用中性的 ta。</li>
+                <li><b>她会先开口</b>：你超过约 6 小时没说话，她会自己挑个话头来问候一句；
+                    长时间不理就按 12 / 24 / 48 小时递增，至多 5 次，你一回应就重新计时。
+                    只在应用开着时发生，不唤醒、不推送，也能在设置里彻底关掉。</li>
+                <li><b>流式回复</b>：回复逐字出现，随时可以停。</li>
+                <li><b>连本地模型也行</b>：地址填 <code>http://电脑IP:11434/v1</code> 就能连你自己电脑上的 Ollama，
+                    这样连一个字都不会出你的局域网。</li>
+            </ul>
+            <div class="tip">
+                <b>关于隐私与费用：</b>只有你在这一栏里主动发出的内容，才会送达<b>你自己填的那家服务商</b>；
+                开发者没有服务器，不经手也看不到。API 密钥只存在本机，并且<b>被排除在所有导出物之外</b>——
+                数据包、每日镜像、每日 Word 里都不会带上它。AI 的人设卡、记忆片段与全部对话
+                每天会自动导出一份（<code>/Documents/Sympnoia/ai/</code> 一份覆盖式数据包，
+                <code>/Documents/Sympnoia/auto/</code> 一份滚动保留七天的 Word），也可以随时手动导出。
+                模型调用产生的费用由使用者自行承担。不打开「对话」这一栏，应用<b>不会发出任何网络请求</b>。
+            </div>
+
+            <h2>备份放在哪里（1.1 起）</h2>
+            <p>
+                所有导出都在<b>应用数据之外</b>的公共目录里，因此<b>卸载应用不会把备份一起删掉</b>：
+            </p>
+            <ul>
+                <li><code>/Documents/Sympnoia/</code>　手动导出：Word 文档 + 数据包 <code>.zip</code>（不限份数）</li>
+                <li><code>/Documents/Sympnoia/auto/</code>　每天自动导出的 Word。
+                    <b>自动导出一律是覆盖式的</b>：记录与 AI 两种文档一起按天算，只留最近 7 天，
+                    第 8 天起从最早那天整日覆盖 —— 不会随着天数越攒越多</li>
+                <li><code>/Documents/Sympnoia/mirror/</code>　每天覆盖的原始数据镜像（单个 zip，只留最新 1 份）</li>
+                <li><code>/Documents/Sympnoia/ai/</code>　每天覆盖的 AI 数据包（人设卡 + 记忆片段 + 全部对话 + 自动记忆 + 头像，只留最新 1 份）</li>
+                <li><code>/Documents/Sympnoia/restore/</code>　从备份恢复前自动留的底（保留最近 3 份）</li>
+            </ul>
+            <div class="tip">
+                换手机时，把 <code>/Documents/Sympnoia/</code> 这个文件夹拷到新机（或先传到网盘），
+                再在新机上用应用内的「花房 · 数据 → 从备份恢复」选中 zip 即可。
+            </div>
+
+            <h2>为什么它值得信任</h2>
+            <ul>
+                <li><b>开发者没有服务器</b>：不注册、不登录，开发者拿不到你任何一条记录</li>
+                <li><b>联网只为一件事</b>：唯一会用到网络的是「对话」一栏里的 AI 聊天——接口地址与密钥<b>全部由你自己填写</b>，
+                    应用里没有任何由开发者提供的密钥或中转服务器；不打开那一栏，就不会发出任何网络请求</li>
+                <li><b>备份里没有你的密钥</b>：API Key 单独存放，并被特意排除在「导出数据包 / 数据镜像 / 恢复留底」之外，
+                    所以那些会落到公共目录的备份文件可以放心保存与分享</li>
+                <li><b>没有广告、没有统计埋点、没有第三方 SDK</b></li>
+                <li><b>只申请必要权限</b>：身体活动（记步）、通知（计时提醒）、开机自启（恢复计时）、网络（仅 AI 对话，见隐私政策）；不申请相机、麦克风、位置、通讯录、短信、电话、全部文件读写等敏感权限</li>
+            </ul>
+            <div class="tip">
+                完整说明见 <a href="privacy.html" style="color:#fbc2eb;">隐私政策</a>。
+            </div>
+
+            <h2>安装步骤</h2>
+            <ol>
+                <li>点上面的按钮下载 <code>Sympnoia-1.8.7.apk</code></li>
+                <li>在手机「设置 → 安全」里允许<strong>安装未知来源的应用</strong>（不同品牌路径略有差异）</li>
+                <li>打开下载好的 APK 完成安装</li>
+                <li>首次启动后按提示授予「身体活动」权限（用于记步）与通知权限（用于番茄钟提醒）</li>
+            </ol>
+            <div class="tip">
+                已经装过 1.0 / 1.1 / 1.2 / 1.4.3 的话，直接装 1.8.7 即可<b>覆盖升级</b>（同一个签名），记录不会丢。
+            </div>
+
+            <h2>版本与签名</h2>
+            <ul>
+                <li>本安装包使用开发者自有证书签名（证书主体：<code>CN=Sympnoia</code>），<b>不是调试签名</b></li>
+                <li>后续版本会沿用同一签名，可直接覆盖安装、数据不丢</li>
+                <li>安装包 SHA-256：<code>49C3E9328672F9A84D388DC46C6826FA858F614B077CE221F837028F1F179E36</code></li>
+                <li>签名证书 SHA-256 指纹：<code>a832db7f…15ef0d9</code></li>
+            </ul>
+
+            <h2>旧版本存档</h2>
+            <ul>
+                <li><a href="app/archive/Sympnoia-1.8.7.apk" download style="color:#fbc2eb;">Sympnoia-1.8.7.apk</a>（约 9.66 MB · SHA-256：<code>49C3E932…1F179E36</code>）
+                    —— <b>定稿版本</b>：功能到此为止，此后不再改动。</li>
+                <li><a href="app/archive/Sympnoia-1.4.3.apk" download style="color:#fbc2eb;">Sympnoia-1.4.3.apk</a>（约 9.63 MB · SHA-256：<code>7842D4E2…8CC123BD</code>）
+                    —— 更早的存档。</li>
+            </ul>
+
+            <div class="warn">
+                <b>⚠️ 注意：</b>本应用暂未上架任何应用市场，仅在此页提供安装包。
+                记录本体保存在应用数据目录里，<b>卸载应用会一并删除</b>；
+                但 1.1 起所有备份都写在 <code>/Documents/Sympnoia/</code>，
+                <b>卸载不会带走备份</b>，重装后用「从备份恢复」即可找回。
+            </div>
+
+            <h2>反馈与联系</h2>
+            <p>
+                使用中遇到问题或有建议，欢迎邮件联系：
+                <a href="mailto:asephina.love@outlook.com" style="color:#fbc2eb;">asephina.love@outlook.com</a>
+            </p>
+
+        </div>
+</div>
+        </div>
+<div id="foot"></div>
+<script src="assets/site.js?v=v7"></script>
+<script src="assets/life.js?v=v7"></script>
+<script>LM.shell();</script>
+</body>
+</html>

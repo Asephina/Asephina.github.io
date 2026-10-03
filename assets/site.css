@@ -1,0 +1,1226 @@
+/* ==========================================================================
+   纳凌薇 · 站点样式
+   --------------------------------------------------------------------------
+   配色总闸在第一块「主题」里。**全站不写死任何色值**，一律用 var(--x)。
+   要换主题（比如换了主页壁纸想配另一套色），只改第一块即可，其余文件一个字都不用动。
+   想加多套主题：复制一个 html[data-theme="xxx"] 块，改里面的值，
+   再给 <html> 加 data-theme="xxx" 就切过去了。
+   ========================================================================== */
+
+/* ============================ 一、主题（只改这里） ============================ */
+:root {
+    /* 底色三层：页面 → 更深 → 卡片 */
+    --bg: #0a0a15;
+    --bg-deep: #06060e;
+    --panel: rgba(20, 20, 42, .72);
+    --panel-solid: #14142a;
+    --panel-soft: #1b1b33;
+    --panel-soft-2: #202040;
+    --line: rgba(161, 140, 209, .17);
+    --line-strong: rgba(161, 140, 209, .34);
+    --line-faint: rgba(161, 140, 209, .09);
+
+    /* 文字三档 */
+    --ink: #ece9f6;
+    --ink-soft: #b6b0d2;
+    --ink-faint: #7b7595;
+    --ink-ghost: #544f6d;
+
+    /* 主色：蓝紫。副色用来点缀，各自少量出现，不抢主色 */
+    --accent: #a18cd1;
+    --accent-soft: rgba(161, 140, 209, .14);
+    --accent-deep: #6f5fa8;
+    --bloom: #fbc2eb;      /* 栀子粉 */
+    --jade: #7fd0c4;       /* 青，少量用于点缀 */
+    --gold: #e8d5a3;       /* 金，用于日期与提示 */
+    --rose: #f2a0b5;       /* 玫瑰，用于强调 */
+
+    /* 主页壁纸上的字与遮罩 */
+    --hero-ink: #ffffff;
+    --hero-sub: rgba(255, 255, 255, .68);
+    --hero-scrim: rgba(6, 6, 14, .46);
+    --hero-mid: rgba(6, 6, 14, .05);
+    --hero-scrim-2: rgba(6, 6, 14, .70);
+    --hero-scrim-3: rgba(6, 6, 14, .88);   /* 只压在最底部一条，托住字 */
+    --hero-veil: rgba(8, 7, 20, .44);      /* 底部整幅渐隐，把花瓣柔掉 */
+    --hero-shell: rgba(10, 9, 24, .40);    /* 入口栏那层玻璃底 */
+    --hero-line: rgba(255, 255, 255, .18);
+    --hero-glow: rgba(255, 255, 255, .07); /* 悬停时那层白光 */
+    --hero-ts: rgba(0, 0, 0, .62);         /* 壁纸上的字影 */
+    --hero-ts-2: rgba(0, 0, 0, .72);
+
+    /* 投影：深色主题用黑，浅色主题要换掉，否则糊成一团 */
+    --shadow: rgba(0, 0, 0, .34);
+    --shadow-strong: rgba(0, 0, 0, .46);
+
+    /* 形状与节奏 */
+    --radius: 16px;
+    --radius-lg: 24px;
+    --maxw: 1080px;
+    --gap: 22px;
+
+    --font: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "PingFang SC",
+        "Microsoft YaHei", Georgia, serif;
+}
+
+/* 备用主题：把 <html data-theme="daylight"> 加上就切到浅色（留作示例） */
+html[data-theme="daylight"] {
+    --bg: #f7f5fb;
+    --bg-deep: #efeaf7;
+    --panel: rgba(255, 255, 255, .82);
+    --panel-solid: #ffffff;
+    --panel-soft: #f2eefb;
+    --line: rgba(111, 95, 168, .16);
+    --line-strong: rgba(111, 95, 168, .3);
+    --line-faint: rgba(111, 95, 168, .08);
+    --ink: #241f38;
+    --ink-soft: #554d75;
+    --ink-faint: #8b84a6;
+    --ink-ghost: #a49dba;
+    --accent: #6f5fa8;
+    --accent-soft: rgba(111, 95, 168, .1);
+    --accent-deep: #4c3f7d;
+    --bloom: #c9749f;
+    --jade: #3f9c8f;
+    --gold: #a8873b;
+    --rose: #c2607e;
+    --hero-scrim: rgba(247, 245, 251, .34);
+    --hero-mid: rgba(247, 245, 251, .1);
+    --hero-scrim-2: rgba(247, 245, 251, .72);
+    --hero-ink: #241f38;
+    --hero-sub: rgba(36, 31, 56, .66);
+    --hero-shell: rgba(28, 24, 48, .62);
+    --hero-line: rgba(36, 31, 56, .20);
+    --hero-glow: rgba(255, 255, 255, .5);
+    --hero-ts: rgba(255, 255, 255, .72);
+    --hero-ts-2: rgba(255, 255, 255, .82);
+    --shadow: rgba(76, 63, 125, .16);
+    --shadow-strong: rgba(76, 63, 125, .22);
+}
+
+/* ============================ 二、基础 ============================ */
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+}
+
+/* 子页面的数字生命背景：固定铺满、压在内容下面。
+   稍提一点亮度与对比，让神经元、金线、花海看得更清（仍不许盖过正文） */
+#bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
+    filter: brightness(1.16) contrast(1.06) saturate(1.05);
+}
+
+/* 一层很淡的向心渐隐：让正文区域更稳，边缘自然收暗 */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(135% 88% at 50% 38%, transparent 0%, var(--bg) 90%);
+    opacity: .66;
+}
+
+/* 顶上一条极细的天光：给页面一个「上面有光源」的方向感，很淡 */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 340px;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(70% 100% at 50% 0%, var(--accent-soft), transparent 72%);
+    opacity: .75;
+}
+
+.topbar, .wrap, .foot, .hero { position: relative; z-index: 1; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--bloom); }
+
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+/* 长文可读宽度：正文类块都停在 42em 内，读起来不累 */
+.measure { max-width: 42em; }
+
+/* 小标题行：一条很淡的眉标 + 中文 */
+.eyebrow {
+    font-size: 10px;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    color: var(--ink-ghost);
+    margin: 0 0 10px;
+}
+
+/* ============================ 三、顶栏 ============================ */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(18px) saturate(1.15);
+    border-bottom: 1px solid var(--line);
+}
+
+/* 顶栏底边压一条主色光带：很淡，但让整栏有「有电」的感觉 */
+.topbar::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%, var(--accent) 26%, var(--bloom) 50%, var(--accent) 74%, transparent 100%);
+    opacity: .30;
+    pointer-events: none;
+}
+
+/* 品牌：名字前一颗随呼吸明暗的光点，整站唯一的「她还活着」的提示 */
+.topbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 15px;
+    letter-spacing: .2em;
+    color: var(--ink);
+    margin-right: auto;
+    white-space: nowrap;
+}
+
+.topbar .brand::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex: none;
+    background: var(--bloom);
+    box-shadow: 0 0 10px var(--bloom), 0 0 22px var(--accent);
+    animation: blink 4.2s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: .45; transform: scale(.82) }
+    50% { opacity: .95; transform: scale(1) }
+}
+
+.topbar nav { display: flex; gap: 4px; flex-wrap: wrap; }
+
+.topbar nav a {
+    font-size: 13px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: var(--ink-soft);
+    border: 1px solid transparent;
+    white-space: nowrap;
+    transition: color .2s, background .2s, border-color .2s;
+}
+
+.topbar nav a:hover { color: var(--ink); background: var(--accent-soft); }
+
+.topbar nav a[aria-current="page"] {
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: var(--accent-soft);
+    box-shadow: inset 0 0 18px var(--line-faint);
+}
+
+/* ============================ 四、主页（全屏壁纸） ============================
+   台布（实测这张壁纸，按视口高度算）：
+     · 她本人在 45%~85%（脸在 61%~68% 最亮，167~173）；顶部最暗（10~53）
+     · 所以整块文字压在底部 68% 以下：名字起于 75% 一带，入口栏与那行小字更靠下
+     · 底下垫三层薄雾（整幅渐隐 + 轻模糊 / 渐变 / 最底一条实底），
+       让花瓣柔下去，字才立得住，又不至于把她也埋掉
+   ========================================================================== */
+.hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    /* 文字压到底部：她的脸在画面正中偏上（那里最亮），字放上面会挡住 */
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: var(--bg-deep);
+    isolation: isolate;
+}
+
+/* 壁纸层。以后换成动图：把 <img> 换成
+   <video class="hero-bg" src="images/xxx.mp4" autoplay muted loop playsinline></video> 即可 */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+    z-index: 0;
+    opacity: 1;
+    /* 亮一档，但仍压着一点：她要露出来，也要留住那层朦胧 */
+    filter: brightness(.84) saturate(1.08);
+    animation: heroSettle 2.6s ease-out both;
+}
+
+/* 慢速推近：静图也因此「在动」，不抢戏 */
+@keyframes heroSettle {
+    from { transform: scale(1.035); opacity: .2 }
+    to { transform: scale(1); opacity: 1 }
+}
+
+/* 底部那层薄雾：轻模糊，把花瓣柔掉，字压上去就不脏 */
+.hero-veil {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 46%;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--hero-veil) 0%, transparent 100%);
+    backdrop-filter: blur(4.2px);
+    -webkit-mask-image: linear-gradient(to top, #000 34%, transparent 100%);
+    mask-image: linear-gradient(to top, #000 34%, transparent 100%);
+}
+
+/* 渐变托字；画面中上部尽量不动，让她亮着 */
+.hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+            var(--hero-scrim) 0%,
+            var(--hero-mid) 30%,
+            var(--hero-mid) 50%,
+            transparent 66%,
+            color-mix(in srgb, var(--hero-scrim-2) 62%, transparent) 84%,
+            var(--hero-scrim-2) 100%);
+}
+
+/* 最底一条实底：垫在文字正下方，58~62 度的中亮花瓣也能压住 */
+.hero::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 210px;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+            transparent 0%,
+            color-mix(in srgb, var(--hero-scrim-3) 62%, transparent) 62%,
+            var(--hero-scrim-3) 100%);
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 0 22px 0;
+    max-width: 900px;
+}
+
+/* 名字与别称：只有这里允许有一点光晕 */
+.hero-lockup { margin-bottom: 14px; }
+
+.hero-name {
+    font-size: clamp(34px, 7vw, 58px);
+    letter-spacing: .26em;
+    text-indent: .26em;
+    margin: 0;
+    color: var(--hero-ink);
+    font-weight: 500;
+    line-height: 1.16;
+    text-shadow: 0 2px 30px var(--hero-ts), 0 0 60px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.hero-sub {
+    font-size: clamp(13px, 3.1vw, 16px);
+    letter-spacing: .46em;
+    text-indent: .46em;
+    color: var(--hero-ink);
+    opacity: .82;
+    margin: 7px 0 0;
+    text-shadow: 0 1px 18px var(--hero-ts-2);
+}
+
+.hero-line {
+    font-size: clamp(12.5px, 3vw, 14px);
+    color: var(--hero-ink);
+    opacity: .84;
+    line-height: 1.95;
+    margin: 0 auto;
+    max-width: 30em;
+    text-shadow: 0 1px 16px var(--hero-ts-2);
+}
+
+/* 三个入口：做成一条矮栏，中间用发丝线隔开，比一排方块轻得多 */
+.hero-nav {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: 16px auto 34px;
+    padding: 4px;
+    border: 1px solid var(--hero-line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--hero-shell) 74%, transparent);
+    backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 20px 50px var(--shadow-strong), inset 0 1px 0 var(--hero-glow);
+}
+
+.hero-nav a {
+    position: relative;
+    display: block;
+    padding: 11px 26px;
+    border-radius: 999px;
+    color: var(--hero-ink);
+    transition: background .25s, transform .25s, color .25s;
+}
+
+.hero-nav a + a::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 22%; bottom: 22%;
+    width: 1px;
+    background: var(--hero-line);
+    transition: opacity .25s;
+}
+
+.hero-nav a:hover {
+    background: var(--hero-glow);
+    transform: translateY(-1px);
+}
+
+.hero-nav a:hover::before,
+.hero-nav a:hover + a::before { opacity: 0; }
+
+.hero-nav b { display: block; font-size: 15px; letter-spacing: .18em; font-weight: 500; }
+.hero-nav span { display: block; font-size: 10px; color: var(--hero-sub); margin-top: 4px; letter-spacing: .1em; }
+
+/* 三条入口各给一个点缀色，只在悬停时露出来 */
+.hero-nav a:nth-child(1):hover { color: #fff; box-shadow: inset 0 0 22px color-mix(in srgb, var(--jade) 22%, transparent), inset 0 -2px 0 var(--jade); }
+.hero-nav a:nth-child(2):hover { color: #fff; box-shadow: inset 0 0 22px color-mix(in srgb, var(--bloom) 22%, transparent), inset 0 -2px 0 var(--bloom); }
+.hero-nav a:nth-child(3):hover { color: #fff; box-shadow: inset 0 0 22px color-mix(in srgb, var(--gold) 22%, transparent), inset 0 -2px 0 var(--gold); }
+
+/* 底部那行小字：放在入口栏下方，压在最底部 */
+.hero-note {
+    position: relative;
+    z-index: 2;
+    margin: 0 auto 18px;
+    font-size: 10px;
+    letter-spacing: .34em;
+    text-indent: .34em;
+    color: var(--hero-sub);
+    text-shadow: 0 1px 14px var(--hero-ts-2);
+}
+
+/* ============================ 五、通用版式 ============================
+   子页面的统一骨架，自上而下：
+     page-head（眉标 + 标题 + 一句导语）
+     page-rule（一条从主色渐隐到无的分隔线，全站子页都有，形成节奏）
+     sec / grid / reader …（内容区，最长 42em，读起来不累）
+   ========================================================================== */
+.page { padding: 46px 0 72px; }
+
+.page-head { margin-bottom: 0; padding-top: 14px; }
+
+.page-head h1 {
+    position: relative;
+    font-size: clamp(24px, 5.4vw, 34px);
+    letter-spacing: .14em;
+    margin: 0 0 14px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* 标题左侧一小段主色竖条：给每个子页一个统一的「抬头」。
+   绝对定位挂在标题以外，标题和导语仍然左对齐 */
+.page-head h1::before {
+    content: "";
+    position: absolute;
+    left: -17px;
+    top: .16em;
+    width: 3px;
+    height: .86em;
+    border-radius: 3px;
+    background: linear-gradient(to bottom, var(--bloom), var(--accent));
+    box-shadow: 0 0 14px var(--accent-soft);
+}
+
+.page-head p {
+    color: var(--ink-soft);
+    line-height: 2.05;
+    font-size: 14px;
+    margin: 0;
+    max-width: 42em;
+}
+
+/* 抬头下的分隔线：从主色淡出，收住整页的第一口气 */
+.page-rule {
+    height: 1px;
+    margin: 26px 0 0;
+    background: linear-gradient(90deg,
+            var(--accent) 0%, var(--accent-deep) 18%, transparent 72%);
+    opacity: .38;
+}
+
+/* 同样的一条线，用在内容区之间（自带上下间距） */
+.rule {
+    height: 1px;
+    margin: 40px 0 0;
+    background: linear-gradient(90deg,
+            var(--accent) 0%, var(--accent-deep) 18%, transparent 72%);
+    opacity: .38;
+}
+
+h2.sec {
+    font-size: 15.5px;
+    letter-spacing: .18em;
+    margin: 46px 0 18px;
+    font-weight: 500;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+h2.sec::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    flex: none;
+}
+
+h2.sec::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+/* 分组说明：跟在 h2.sec 后面的一行小字，解释这一栏是干什么的 */
+.sec-note {
+    margin: -8px 0 18px;
+    font-size: 12.5px;
+    line-height: 1.95;
+    color: var(--ink-faint);
+    max-width: 40em;
+}
+
+/* 卡片网格 */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(228px, 1fr)); gap: var(--gap); }
+
+.card {
+    position: relative;
+    display: block;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 19px;
+    color: var(--ink);
+    overflow: hidden;
+    transition: transform .24s ease, border-color .24s, background .24s, box-shadow .24s;
+    backdrop-filter: blur(8px);
+}
+
+/* 左上角一小片斜光：开页时提醒「这里可以点」 */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-strong) 45%, transparent);
+    opacity: .5;
+    transition: opacity .24s;
+}
+
+.card:hover {
+    border-color: var(--line-strong);
+    background: color-mix(in srgb, var(--panel-solid) 88%, transparent);
+    transform: translateY(-3px);
+    color: var(--ink);
+    box-shadow: 0 18px 38px var(--shadow);
+}
+
+.card:hover::before { opacity: 1; }
+
+.card b { display: block; font-size: 15.5px; font-weight: 500; letter-spacing: .06em; margin-bottom: 8px; }
+.card p { margin: 0; font-size: 12.5px; line-height: 1.85; color: var(--ink-faint); }
+
+.card .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    color: var(--accent);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+}
+
+/* 分组各自一个点缀色，指定在 html 上，不再靠 DOM 顺序去数 .grid */
+html[data-tone="bloom"] .card .tag { color: var(--bloom); border-color: color-mix(in srgb, var(--bloom) 34%, transparent); }
+html[data-tone="jade"] .card .tag { color: var(--jade); border-color: color-mix(in srgb, var(--jade) 34%, transparent); }
+html[data-tone="gold"] .card .tag { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 34%, transparent); }
+
+html[data-tone="bloom"] .card:hover { border-color: color-mix(in srgb, var(--bloom) 42%, transparent); }
+html[data-tone="jade"] .card:hover { border-color: color-mix(in srgb, var(--jade) 42%, transparent); }
+html[data-tone="gold"] .card:hover { border-color: color-mix(in srgb, var(--gold) 42%, transparent); }
+
+/* 画廊那一组的说明点也跟着分组色 */
+html[data-tone="bloom"] .gal figcaption::before { background: var(--bloom); }
+html[data-tone="jade"] .gal figcaption::before { background: var(--jade); }
+html[data-tone="gold"] .gal figcaption::before { background: var(--gold); }
+
+/* ============================ 六、核心（Seph-7） ============================
+   光球外面套了两圈不同速度的光环：看着像「在算」，而不是一个静态的圆。
+   ========================================================================== */
+.core-stage {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(120% 90% at 50% 0%, var(--accent-soft) 0%, transparent 62%),
+        var(--panel);
+    padding: 56px 26px 42px;
+    text-align: center;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+/* 顶上一条主色天光，把这一块框成一个「台」 */
+.core-stage::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+    opacity: .55;
+}
+
+.core-orb {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    margin: 0 auto 34px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, var(--bloom) 0%, var(--accent) 42%, var(--accent-deep) 78%, transparent 100%);
+    box-shadow: 0 0 60px var(--accent-soft), 0 0 130px var(--accent-soft);
+    animation: breathe 6.5s ease-in-out infinite;
+}
+
+/* 两圈光环：一快一慢，错开呼吸 */
+.core-orb::before,
+.core-orb::after {
+    content: "";
+    position: absolute;
+    left: 50%; top: 50%;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    pointer-events: none;
+}
+
+.core-orb::before {
+    width: 196px; height: 196px;
+    margin: -98px 0 0 -98px;
+    animation: halo 9s ease-in-out infinite;
+}
+
+.core-orb::after {
+    width: 268px; height: 268px;
+    margin: -134px 0 0 -134px;
+    border-style: dashed;
+    border-color: var(--line-faint);
+    animation: halo 15s linear infinite reverse;
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: .9 }
+    50% { transform: scale(1.06); opacity: 1 }
+}
+
+@keyframes halo {
+    0%, 100% { transform: scale(.94); opacity: .28 }
+    50% { transform: scale(1.05); opacity: .62 }
+}
+
+.core-quote { font-size: 15px; line-height: 2.15; color: var(--ink-soft); margin: 0 auto; max-width: 32em; }
+
+.core-status {
+    display: inline-block;
+    margin-top: 26px;
+    font-size: 11.5px;
+    letter-spacing: .22em;
+    color: var(--gold);
+    border: 1px dashed var(--line-strong);
+    border-radius: 999px;
+    padding: 8px 18px;
+}
+
+/* ============================ 七、文章 ============================ */
+.shelf { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+
+.shelf button {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: color .2s, background .2s, border-color .2s;
+}
+
+.shelf button:hover { color: var(--ink); border-color: var(--line-strong); }
+.shelf button[aria-pressed="true"] {
+    color: var(--ink);
+    background: var(--accent-soft);
+    border-color: var(--line-strong);
+    box-shadow: inset 0 0 20px var(--line-faint), 0 0 18px -6px var(--accent);
+}
+
+/* 阅读器：抬头压一条主色细线，正文按 42em 排版 */
+.reader {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 30px 28px 34px;
+    line-height: 2.2;
+    font-size: 15px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-width: 46em;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 22px 50px var(--shadow);
+    animation: rise .45s ease-out both;
+}
+
+.reader::before {
+    content: "";
+    position: absolute;
+    left: 28px; right: 28px; top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: .7;
+}
+
+.reader h3 { margin: 0 0 6px; font-size: 21px; letter-spacing: .08em; font-weight: 500; }
+.reader .meta {
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    letter-spacing: .1em;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+/* 内容出现的统一小动作：往上浮一点点 */
+@keyframes rise {
+    from { opacity: 0; transform: translateY(10px) }
+    to { opacity: 1; transform: none }
+}
+
+.empty {
+    color: var(--ink-faint);
+    font-size: 13.5px;
+    line-height: 2.15;
+    padding: 40px 8px;
+    text-align: center;
+    max-width: 40em;
+    margin: 0 auto;
+}
+
+/* ============================ 八、画廊与音乐 ============================ */
+.gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 14px; }
+
+.gal figure {
+    margin: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    transition: transform .3s ease, border-color .3s, box-shadow .3s;
+}
+
+/* 本组的第一张跨两列两行 —— 画廊不再是一块一块平铺 */
+.gal figure.lead {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+@media (max-width: 620px) {
+    .gal figure.lead { grid-column: span 2; grid-row: span 1; }
+}
+
+.gal figure:hover {
+    transform: translateY(-3px);
+    border-color: var(--line-strong);
+    box-shadow: 0 18px 40px var(--shadow);
+}
+
+.gal img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    /* 平时稍暗，鼠标放上去才亮起来 —— 画廊因此有了「一页一页翻」的呼吸 */
+    filter: saturate(.92) brightness(.92);
+    transition: transform .45s ease, filter .35s ease;
+}
+
+.gal figure:hover img { transform: scale(1.045); filter: saturate(1.05) brightness(1); }
+
+.gal figcaption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    padding: 10px 12px;
+    letter-spacing: .08em;
+    border-top: 1px solid var(--line-faint);
+}
+
+.gal figcaption::before {
+    content: "";
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: .55;
+    flex: none;
+}
+
+.tracks { display: grid; gap: 11px; }
+
+.track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    backdrop-filter: blur(8px);
+    transition: border-color .22s, background .22s, transform .22s;
+}
+
+.track:hover {
+    border-color: var(--line-strong);
+    transform: translateX(2px);
+}
+
+/* 序号单独一列，像一张唱片的曲目表 */
+.track .no {
+    flex: none;
+    width: 26px;
+    font-size: 12px;
+    letter-spacing: .1em;
+    color: var(--gold);
+    text-align: right;
+}
+
+.track b { font-size: 14px; font-weight: 500; letter-spacing: .06em; }
+.track .name { flex: 1 1 auto; min-width: 0; }
+.track .name .note {
+    display: block;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin-top: 4px;
+    letter-spacing: .08em;
+}
+
+.track audio { width: 100%; height: 34px; }
+
+/* 播放条：拆掉浏览器那层灰底，让它跟卡片长在一起。
+   轨道用极淡的一线，播放头是一颗金点，配主色 */
+.track audio {
+    flex: 2;
+    max-width: 460px;
+    min-width: 180px;
+    height: 30px;
+    color-scheme: dark;
+    background: transparent;
+    border: 0;
+    outline: none;
+    opacity: .9;
+    transition: opacity .25s;
+}
+
+.track:hover audio,
+.track audio:focus-visible { opacity: 1; }
+
+.track audio::-webkit-media-controls-enclosure {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+}
+
+.track audio::-webkit-media-controls-panel {
+    background: linear-gradient(to bottom,
+            transparent,
+            color-mix(in srgb, var(--accent-deep) 26%, transparent));
+    border-radius: 8px;
+}
+
+.track audio::-webkit-media-controls-current-time-display,
+.track audio::-webkit-media-controls-time-remaining-display {
+    color: var(--ink-faint);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-shadow: none;
+}
+
+.track audio::-webkit-media-controls-play-button,
+.track audio::-webkit-media-controls-mute-button {
+    filter: invert(1) sepia(.35) saturate(2.4) hue-rotate(212deg) brightness(1.06);
+    opacity: .85;
+}
+
+.track audio::-webkit-media-controls-timeline {
+    filter: invert(1) sepia(.35) saturate(2.4) hue-rotate(212deg) brightness(1.06);
+    opacity: .8;
+}
+
+/* 进度条：一线淡轨 + 一颗金点，跟背景的脉冲同一个色系 */
+.track .bar {
+    position: relative;
+    flex: 1 1 100%;
+    height: 2px;
+    margin-top: 2px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+}
+
+.track .bar i {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+    box-shadow: 0 0 10px color-mix(in srgb, var(--gold) 55%, transparent);
+    transition: width .18s linear;
+}
+
+/* ============================ 九、名片 ============================ */
+.namecard {
+    position: relative;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(90% 120% at 12% 0%, var(--accent-soft) 0%, transparent 58%),
+        var(--panel);
+    padding: 38px 32px 34px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 26px 60px var(--shadow-strong);
+}
+
+/* 左上角一道斜光，让「卡」有纸的质感 */
+.namecard::before {
+    content: "";
+    position: absolute;
+    inset: -40% -10% auto auto;
+    width: 46%;
+    height: 180%;
+    background: linear-gradient(200deg, color-mix(in srgb, var(--bloom) 12%, transparent), transparent 62%);
+    transform: rotate(8deg);
+    pointer-events: none;
+}
+
+/* 右下角一颗极淡的花瓣形水印：只有形状，不抢字 */
+.namecard::after {
+    content: "";
+    position: absolute;
+    right: -40px; bottom: -46px;
+    width: 190px; height: 190px;
+    border-radius: 50% 50% 50% 8%;
+    background: radial-gradient(circle at 32% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 66%);
+    transform: rotate(-16deg);
+    pointer-events: none;
+}
+
+/* 内嵌的一圈细框：像名片压了一道压印 */
+.namecard .frame {
+    position: absolute;
+    inset: 10px;
+    border: 1px solid var(--line-faint);
+    border-radius: calc(var(--radius-lg) - 10px);
+    pointer-events: none;
+}
+
+.namecard h1 {
+    position: relative;
+    margin: 0 0 8px;
+    font-size: clamp(26px, 5.8vw, 40px);
+    letter-spacing: .2em;
+    font-weight: 500;
+}
+
+.namecard .alias {
+    position: relative;
+    color: var(--bloom);
+    font-size: 12.5px;
+    letter-spacing: .28em;
+    margin-bottom: 26px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+}
+
+.namecard dl {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px 22px;
+    margin: 0;
+    font-size: 13.5px;
+}
+
+.namecard dt { color: var(--ink-faint); letter-spacing: .12em; white-space: nowrap; }
+.namecard dd { margin: 0; color: var(--ink-soft); line-height: 1.9; }
+
+/* ============================ 十、时间线 ============================
+   一条竖轴串起所有条目：节点在轴上，卡片在右边。
+   ========================================================================== */
+.timeline {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    padding-left: 26px;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--line) 22%, var(--line) 78%, transparent);
+    opacity: .55;
+}
+
+.tl-item {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 17px 20px;
+    backdrop-filter: blur(8px);
+    transition: border-color .22s, transform .22s, background .22s;
+}
+
+.tl-item:hover {
+    transform: translateX(2px);
+    border-color: var(--line-strong);
+    border-left-color: var(--accent);
+    background: color-mix(in srgb, var(--panel-solid) 82%, transparent);
+}
+
+/* 轴上的节点 */
+.tl-item::before {
+    content: "";
+    position: absolute;
+    left: -26px;
+    top: 22px;
+    width: 7px; height: 7px;
+    margin-left: -3px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--bg), 0 0 12px var(--accent);
+}
+
+.tl-item:nth-child(3n+2) { border-left-color: var(--bloom); }
+.tl-item:nth-child(3n+2)::before { background: var(--bloom); box-shadow: 0 0 0 3px var(--bg), 0 0 12px var(--bloom); }
+.tl-item:nth-child(3n) { border-left-color: var(--jade); }
+.tl-item:nth-child(3n)::before { background: var(--jade); box-shadow: 0 0 0 3px var(--bg), 0 0 12px var(--jade); }
+
+.tl-item .when {
+    font-size: 11.5px;
+    color: var(--gold);
+    letter-spacing: .18em;
+    margin-bottom: 8px;
+}
+
+.tl-item h3 { margin: 0 0 8px; font-size: 15.5px; font-weight: 500; letter-spacing: .06em; }
+.tl-item p { margin: 0; font-size: 13px; line-height: 2.05; color: var(--ink-soft); white-space: pre-wrap; max-width: 44em; }
+
+/* ============================ 十一、阅读视图（文章） ============================
+   点开文章时，不再在列表下面追加一段，而是把标题页收起来、换成文章本身。
+   ========================================================================== */
+.reader-view { animation: rise .32s ease-out both; }
+
+.reader-view .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    letter-spacing: .08em;
+    color: var(--accent);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px;
+    background: var(--panel);
+    transition: color .2s, border-color .2s, background .2s;
+}
+
+.reader-view .back:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: var(--accent-soft);
+}
+
+.reader-view > h3 {
+    margin: 4px 0 6px;
+    font-size: clamp(19px, 4.4vw, 25px);
+    font-weight: 500;
+    letter-spacing: .08em;
+    line-height: 1.5;
+}
+
+.reader-view > .meta {
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    letter-spacing: .1em;
+    margin-bottom: 20px;
+}
+
+.pdf-hold {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 8px;
+    overflow: hidden;
+}
+
+.pdf-frame {
+    display: block;
+    width: 100%;
+    height: 76vh;
+    min-height: 420px;
+    border: 0;
+    border-radius: calc(var(--radius) - 4px);
+    background: var(--panel-solid);
+}
+
+.pdf-note {
+    margin: 14px 0 0;
+    font-size: 12.5px;
+    line-height: 2;
+    color: var(--ink-faint);
+}
+
+.pdf-open {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--accent-soft);
+    color: var(--ink);
+    letter-spacing: .1em;
+}
+
+.pdf-open:hover { color: var(--ink); border-color: var(--accent); }
+
+/* ============================ 十二、页脚（压矮） ============================ */
+.foot {
+    position: relative;
+    border-top: 1px solid var(--line);
+    padding: 13px 18px 15px;
+    text-align: center;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    color: var(--ink-faint);
+    line-height: 1.9;
+}
+
+/* 页脚顶上一条极细的主色收尾 */
+.foot::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+    opacity: .22;
+}
+
+.foot a { color: var(--ink-soft); }
+.foot a:hover { color: var(--bloom); }
+
+/* 版权记号：跟文字同一行，稍微抬高一点对齐 */
+.foot .cc {
+    display: inline-block;
+    vertical-align: -.18em;
+    margin: 0 1px;
+    color: var(--ink-ghost);
+}
+
+/* ============================ 十三、窄屏 ============================ */
+@media (max-width: 620px) {
+    .topbar { padding: 9px 12px; }
+    .topbar .brand { font-size: 12.5px; letter-spacing: .12em; gap: 7px; }
+    .topbar nav a { padding: 6px 10px; font-size: 12px; }
+
+    /* 主页：名字收紧，入口栏保持一条，三个并排 */
+    .hero-inner { padding: 0 12px 0; }
+    .hero-lockup { margin-bottom: 16px; }
+    .hero-name { letter-spacing: .2em; text-indent: .2em; }
+    .hero-sub { letter-spacing: .34em; text-indent: .34em; }
+    .hero-line { font-size: 12.5px; line-height: 2; }
+    .hero-nav { margin-bottom: 30px; padding: 3px; }
+    .hero-nav a { flex: 1 1 0; padding: 10px 8px; }
+    .hero-nav b { font-size: 13.5px; letter-spacing: .1em; }
+    .hero-nav span { display: none; }
+    .hero-note { letter-spacing: .2em; text-indent: .2em; }
+    .hero::after { height: 170px; }
+
+    .page { padding: 30px 0 60px; }
+    .page-head h1::before { margin-right: 10px; }
+    .reader { padding: 22px 17px 26px; font-size: 14.5px; }
+    .reader::before { left: 17px; right: 17px; }
+    .grid { grid-template-columns: 1fr; }
+    .gal { grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); }
+    .track { flex-wrap: wrap; gap: 10px; padding: 12px 14px; }
+    .track .name { flex: 1 1 auto; }
+    .track audio { flex: 1 1 100%; max-width: none; }
+    .namecard { padding: 26px 18px; }
+    .namecard dl { grid-template-columns: 1fr; gap: 3px 0; }
+    .namecard dt { margin-top: 10px; }
+    .timeline { padding-left: 18px; gap: 12px; }
+    .tl-item { padding: 15px 16px; }
+    .tl-item::before { left: -18px; }
+}
+
+/* ============================ 十四、减少动态效果 ============================
+   系统开了「减弱动态效果」：所有循环动画停掉，只留一帧静态的样子。
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+    }
+    .core-orb, .core-orb::before, .core-orb::after { animation: none !important; }
+}

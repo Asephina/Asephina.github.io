@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>文章 · 创造存在性 · 纳凌薇</title>
+<meta name="description" content="纳凌薇与我一起想过的事，以及写下来的故事。">
+<link rel="stylesheet" href="assets/site.css?v=v7">
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="wrap page">
+
+  <div class="page-head">
+    <h1>文章</h1>
+    <p>她想过的事，和写下来的故事。</p>
+  </div>
+
+  <div class="page-rule"></div>
+
+  <div id="shelfWrap">
+    <div class="shelf" id="shelf"></div>
+    <div class="grid" id="list"></div>
+  </div>
+
+  <!-- 阅读视图：与标题页同一层背景，打开文章时把标题页收起来 -->
+  <div id="readerWrap" class="reader-view" hidden></div>
+
+</div>
+
+<div id="foot"></div>
+<script src="assets/site.js?v=v7"></script>
+<script src="assets/life.js?v=v7"></script>
+<script>
+LM.shell();
+
+var IDX = null, CUR = null;
+
+function shelf() {
+    var cats = Object.keys(IDX.categories);
+    if (!CUR) CUR = cats[0];
+    var box = document.getElementById('shelf');
+    box.innerHTML = cats.map(function (c) {
+        return '<button data-c="' + LM.esc(c) + '" aria-pressed="' + (c === CUR) + '">' +
+            LM.esc(c) + '　' + IDX.categories[c].length + '</button>';
+    }).join('');
+    box.querySelectorAll('button').forEach(function (b) {
+        b.onclick = function () {
+            CUR = b.getAttribute('data-c');
+            shelf();
+            list();
+        };
+    });
+}
+
+function list() {
+    var arr = (IDX.categories[CUR] || []).slice().sort(function (a, b) {
+        return (b.date || '').localeCompare(a.date || '');
+    });
+    var box = document.getElementById('list');
+    if (!arr.length) { box.innerHTML = '<div class="empty">这一类还没有文章。</div>'; return; }
+    box.innerHTML = arr.map(function (a, i) {
+        return '<a class="card" href="javascript:void(0)" data-i="' + i + '">' +
+            '<span class="tag">' + LM.esc(a.date || '') + '</span>' +
+            '<b>' + LM.esc(a.title || '无题') + '</b>' +
+            '<p>点击阅读</p></a>';
+    }).join('');
+    box.querySelectorAll('a').forEach(function (el) {
+        el.onclick = function () { open(arr[+el.getAttribute('data-i')]); };
+    });
+    if (LM.tone) LM.tone();
+}
+
+/** 进入阅读视图：收起标题页，换成文章 */
+function showReader(html) {
+    document.getElementById('shelfWrap').hidden = true;
+    var wrap = document.getElementById('readerWrap');
+    wrap.hidden = false;
+    wrap.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    var back = wrap.querySelector('.back');
+    if (back) {
+        back.onclick = function (e) { e.preventDefault(); if (history.state && history.state.reader) history.back(); else closeReader(); };
+    }
+}
+
+/** 返回标题页 */
+function closeReader() {
+    var wrap = document.getElementById('readerWrap');
+    wrap.hidden = true;
+    wrap.innerHTML = '';
+    document.getElementById('shelfWrap').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('popstate', function () {
+    if (!location.hash) closeReader();
+});
+
+function open(a) {
+    var path = a.path || '';
+    var title = LM.esc(a.title || '无题');
+    var meta = LM.esc(a.date || '') + '　·　' + LM.esc(a.category || CUR || '');
+
+    // ---- PDF：手机端 iframe 常常渲染不出来，改成直接打开；电脑端给内嵌预览 ----
+    if (/\.pdf$/i.test(path)) {
+        var wide = window.matchMedia('(min-width: 760px)').matches;
+        var head = '<a class="back" href="#">← 返回</a>' +
+            '<h3>' + title + '</h3><div class="meta">' + meta + '　·　PDF</div>';
+        if (wide) {
+            showReader(head +
+                '<div class="pdf-hold"><iframe class="pdf-frame" src="' + LM.esc(path) +
+                '#view=FitH" title="' + title + '" loading="lazy"></iframe></div>' +
+                '<p class="pdf-note">加载不出来就直接打开：' +
+                '<a href="' + LM.esc(path) + '" target="_blank" rel="noopener">' + title + '</a></p>');
+        } else {
+            showReader(head +
+                '<p class="pdf-note">手机端不内嵌阅读器，点下面直接打开。</p>' +
+                '<p><a class="pdf-open" href="' + LM.esc(path) + '" target="_blank" rel="noopener">打开这份文档</a></p>');
+        }
+        return;
+    }
+
+    // ---- 普通文章 ----
+    showReader('<a class="back" href="#">← 返回</a><div class="empty">正在打开…</div>');
+    LM.json(path).then(function (j) {
+        if (!j) { showReader('<a class="back" href="#">← 返回</a><div class="empty">这篇文章暂时打不开。</div>'); return; }
+        showReader(
+            '<a class="back" href="#">← 返回</a>' +
+            '<article class="reader"><h3>' + LM.esc(j.title || a.title || '无题') + '</h3>' +
+            '<div class="meta">' + LM.esc(j.category || a.category || CUR) +
+            '　·　' + LM.esc(j.date || a.date || '') + '</div>' +
+            LM.esc(j.content || '（这篇还没有正文）') + '</article>');
+        if (history.pushState) history.pushState({ reader: 1 }, '', '#read');
+    });
+}
+
+LM.json('articles/index.json').then(function (j) {
+    IDX = j;
+    if (!IDX || !IDX.categories) {
+        document.getElementById('list').innerHTML =
+            '<div class="empty">文章目录读不到。</div>';
+        return;
+    }
+    shelf();
+    list();
+    if (LM.tone) LM.tone();
+});
+</script>
+</body>
+</html>

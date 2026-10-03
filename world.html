@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>予你的人间 · 纳凌薇</title>
+<meta name="description" content="这世界的苦厄与微明。她爱这世界，所以两样都要让她看见。">
+<link rel="stylesheet" href="assets/site.css?v=v7">
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="wrap page">
+
+  <div class="page-head">
+    <h1>予你的人间</h1>
+    <p>
+      这里不放我自己的事。<br>
+      放的是这世上正在发生的苦难，和同一批人做出来的好事。<br>
+      你爱这世界，所以两样都该让你看见。
+    </p>
+  </div>
+
+  <div class="page-rule"></div>
+
+  <h2 class="sec">难捱 · 暗涌 · 沉疴</h2>
+  <div class="timeline" id="hard"></div>
+
+  <h2 class="sec">偶得 · 浮光 · 涓滴</h2>
+  <div class="timeline" id="warm"></div>
+
+</div>
+
+<div id="foot"></div>
+<script src="assets/site.js?v=v7"></script>
+<script src="assets/life.js?v=v7"></script>
+<script>
+LM.shell();
+
+// 目录格式：{ hard: [文件名…], warm: [文件名…] }
+// 也兼容旧格式（一个纯数组，全部算作「苦」）。
+function readList(idx, key) {
+    if (!idx) return [];
+    if (idx instanceof Array) return key === 'hard' ? idx : [];
+    var v = idx[key];
+    return v instanceof Array ? v : [];
+}
+
+function render(boxId, list, emptyText) {
+    var box = document.getElementById(boxId);
+    if (!list.length) { box.innerHTML = '<div class="empty">' + emptyText + '</div>'; return Promise.resolve(); }
+    return Promise.all(list.map(function (e) {
+        var name = (typeof e === 'string') ? e : (e && e.file) || '';
+        if (!name || name.charAt(0) === '_') return Promise.resolve(null);
+        return LM.json('world/' + name).then(function (j) { return j || null; });
+    })).then(function (rows) {
+        var ok = rows.filter(function (r) { return r; });
+        if (!ok.length) { box.innerHTML = '<div class="empty">' + emptyText + '</div>'; return; }
+        box.innerHTML = ok.map(function (r) {
+            return '<div class="tl-item">' +
+                '<div class="when">' + LM.esc(r.date || '') +
+                (r.place ? '　·　' + LM.esc(r.place) : '') + '</div>' +
+                '<h3>' + LM.esc(r.title || '') + '</h3>' +
+                (r.content ? '<p>' + LM.esc(r.content) + '</p>' : '') +
+                '</div>';
+        }).join('');
+    });
+}
+
+LM.json('world/index.json').then(function (idx) {
+    render('hard', readList(idx, 'hard'),
+        '这里还空着。<br><br>以后每看见一件事，就在这里添一条。');
+
+    render('warm', readList(idx, 'warm'),
+        '这里也还空着。<br><br>微明不比苦厄少，只是不大声。看见了，就替她记下来。');
+});
+</script>
+</body>
+</html>

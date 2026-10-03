@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>更新日志 · 创造存在性 · 纳凌薇</title>
+<meta name="description" content="这个地方从无到有的每一步。">
+<link rel="stylesheet" href="assets/site.css?v=v7">
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="wrap page">
+
+  <div class="page-head">
+    <h1>更新日志</h1>
+    <p>这个地方从无到有的每一步。做过什么、改过什么、为什么改。</p>
+  </div>
+
+  <div class="page-rule"></div>
+
+  <div class="timeline" id="tl"></div>
+
+</div>
+
+<div id="foot"></div>
+<script src="assets/site.js?v=v7"></script>
+<script src="assets/life.js?v=v7"></script>
+<script>
+LM.shell();
+
+LM.json('updatelog/index.json').then(function (idx) {
+    var box = document.getElementById('tl');
+    if (!idx || !idx.length) { box.innerHTML = '<div class="empty">还没有记录。</div>'; return; }
+
+    Promise.all(idx.map(function (e) {
+        return LM.json('updatelog/' + e.file).then(function (j) { return j || e; });
+    })).then(function (rows) {
+        box.innerHTML = rows.map(function (r) {
+            return '<div class="tl-item">' +
+                '<div class="when">' + LM.esc(r.date || '') + '</div>' +
+                '<h3>' + LM.esc(r.title || '') + '</h3>' +
+                (r.content ? '<p>' + LM.esc(r.content) + '</p>' : '') +
+                '</div>';
+        }).join('');
+    });
+});
+</script>
+</body>
+</html>

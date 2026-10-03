@@ -1,0 +1,10 @@
+# 本地临时/系统文件
+Thumbs.db
+desktop.ini
+.DS_Store
+*.lnk
+
+# 备份与快照，不进仓库
+*.bak
+backup/
+_verify*/
