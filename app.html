@@ -11,6 +11,8 @@
         * { box-sizing: border-box; }
 
         /* 背景交给 assets/life.js 的 canvas，这里不再自己铺渐变 */
+        #bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; display: block;
+              width: 100%; height: 100%; }
         body {
             background: transparent;
             min-height: 100vh;
@@ -78,7 +80,7 @@
             letter-spacing: .06em;
         }
 
-        .hero {
+        .dl-hero {
             text-align: center;
             padding: 22px 18px;
             border-radius: var(--radius);
@@ -87,14 +89,14 @@
             margin-bottom: 26px;
         }
 
-        .hero .tagline {
+        .dl-hero .tagline {
             color: var(--ink-soft);
             font-size: 13.5px;
             line-height: 2;
             margin-bottom: 16px;
         }
 
-        .hero .tagline b { color: var(--ink); }
+        .dl-hero .tagline b { color: var(--ink); }
 
         .dl-btn {
             display: inline-block;
@@ -174,9 +176,9 @@
         <div class="card">
         <a href="index.html" class="back-link">← 返回主页</a>
         <h1>Sympnoia</h1>
-        <div class="subtitle">一个可以「属于某个人」的本地记录应用</div>
+        <div class="subtitle">一个可以「属于某个人」的本地记录工具</div>
 
-        <div class="hero">
+        <div class="dl-hero">
             <div class="tagline">
                 写下来、记下来、留下来——<br>
                 <b>数据只属于你的手机</b>：除你自愿开启的 AI 对话外，不收集、不上传。
@@ -313,7 +315,7 @@
 
             <h2>旧版本存档</h2>
             <ul>
-                <li><a href="app/archive/Sympnoia-1.8.7.apk" download style="color:#fbc2eb;">Sympnoia-1.8.7.apk</a>（约 9.66 MB · SHA-256：<code>602272BB…30F2158F</code>）
+                <li><a href="app/archive/Sympnoia-1.12.1.apk" download style="color:#fbc2eb;">Sympnoia-1.12.1.apk</a>（约 9.68 MB · SHA-256：<code>602272BB…30F2158F</code>）
                     —— <b>定稿版本</b>：功能到此为止，此后不再改动。</li>
                 <li><a href="app/archive/Sympnoia-1.4.3.apk" download style="color:#fbc2eb;">Sympnoia-1.4.3.apk</a>（约 9.63 MB · SHA-256：<code>7842D4E2…8CC123BD</code>）
                     —— 更早的存档。</li>

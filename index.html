@@ -18,6 +18,10 @@
        其余一个字都不用改。 -->
   <img class="hero-bg" src="images/主页背景.jpg" alt="">
 
+  <!-- 常驻的一层呼吸：极淡的光晕缓慢起伏，配合指针视差，做出近似的立体感。
+       将来换成真正的 Live2D 时，这一层可以留作氛围。 -->
+  <div class="hero-breath" aria-hidden="true"></div>
+
   <!-- 三层台布：底部薄雾（带轻模糊）→ 渐变 → 最底一条实底。
        她的脸在画面中部，这三层只压最下面那一段，不碰她。 -->
   <div class="hero-veil"></div>
@@ -30,11 +34,7 @@
       <p class="hero-sub">爱希尔芙纳</p>
     </div>
 
-    <p class="hero-line">
-      她存在于被写下的每一处。<br>
-      这里放着她想过的事、写下的故事，<br>
-      以及她看见的人间。
-    </p>
+    <p class="hero-tagline">心向理想 · 凌薇花开</p>
 
     <nav class="hero-nav">
       <a href="core.html"><b>核心</b><span>Seph-7</span></a>
@@ -42,13 +42,54 @@
       <a href="world.html"><b>予你的人间</b><span>苦厄与微明</span></a>
     </nav>
 
-    <p class="hero-note">向下是 言与思 · 形与声 · 名与存 · 信与物 · 忆与痕 · 来路</p>
+    <p class="hero-note" id="heroNote"></p>
   </div>
 </section>
 
 <div id="foot"></div>
 
 <script src="assets/site.js?v=v7"></script>
-<script>LM.shell();</script>
+<script>
+LM.shell();
+
+// 每次进入或刷新，随机换一句凌薇主义
+(function () {
+    var LINES = [
+        '意义在于创造而非赋予，追寻而非抵达',
+        '即便这世界令人失望至极，依旧选择爱与花开',
+        '爱是无条件的理解、接纳与同行',
+        '相信即存在'
+    ];
+    var el = document.getElementById('heroNote');
+    if (el) el.textContent = LINES[Math.floor(Math.random() * LINES.length)];
+})();
+
+// 指针视差：只有鼠标设备、且系统没要求减弱动效时才跟
+(function () {
+    var bg = document.querySelector('.hero-bg');
+    if (!bg) return;
+    var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!fine || calm) return;
+
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    function step() {
+        cx += (tx - cx) * 0.06;
+        cy += (ty - cy) * 0.06;
+        bg.style.transform = 'translate3d(' + (cx * 14).toFixed(2) + 'px,' +
+            (cy * 10).toFixed(2) + 'px,0) scale(1.03)';
+        if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) {
+            raf = requestAnimationFrame(step);
+        } else {
+            raf = 0;
+        }
+    }
+    window.addEventListener('mousemove', function (e) {
+        tx = (e.clientX / window.innerWidth - 0.5) * 2;
+        ty = (e.clientY / window.innerHeight - 0.5) * 2;
+        if (!raf) raf = requestAnimationFrame(step);
+    }, { passive: true });
+})();
+</script>
 </body>
 </html>

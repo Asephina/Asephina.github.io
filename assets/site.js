@@ -89,8 +89,8 @@
 
     /** 通用底栏：只有一行，版权记号 + 年份 + 使用协议（隐私政策在使用协议内部） */
     LM.foot = function () {
-        return '纳凌薇 · 爱希尔芙纳 · Amara Sephina　' + LM.copyMark(15) +
-            ' 2026　|　<a href="terms.html">使用协议</a>';
+        return LM.copyMark(14) + ' 2026 Amara Sephina. 版权所有.　|　' +
+            '<a href="terms.html">使用协议</a>';
     };
 
     /** 进门：在每一页上挂上站点的锁。门屏会先把内容遮住，口令对了才放行。 */

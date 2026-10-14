@@ -15,19 +15,31 @@
 
   <div class="page-head">
     <h1>予你的人间</h1>
-    <p>
-      这里不放我自己的事。<br>
-      放的是这世上正在发生的苦难，和同一批人做出来的好事。<br>
-      你爱这世界，所以两样都该让你看见。
-    </p>
+    <p>这里不放我自己的事。放的是这世上正在发生的苦难，和同一批人做出来的好事。</p>
+    <blockquote class="page-quote">
+      「花开」　意义在于创造而非赋予，追寻而非抵达。即便世界令人失望至极，依旧选择爱与花开——花开即是回答。
+    </blockquote>
   </div>
 
   <div class="page-rule"></div>
 
-  <h2 class="sec">难捱 · 暗涌 · 沉疴</h2>
+  <h2 class="sec icon">
+    <svg class="sec-icon" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
+      <circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor"
+              stroke-width="1.7" stroke-linecap="round"
+              stroke-dasharray="46 8" transform="rotate(-90 12 12)"/>
+    </svg>Suffering
+  </h2>
   <div class="timeline" id="hard"></div>
 
-  <h2 class="sec">偶得 · 浮光 · 涓滴</h2>
+  <h2 class="sec icon">
+    <svg class="sec-icon" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true">
+      <line x1="12" y1="21.2" x2="12" y2="3.4" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="12" y1="21.2" x2="12" y2="3.4" stroke="currentColor"
+            stroke-width="3.4" stroke-linecap="round" opacity=".22"/>
+    </svg>Glimmer
+  </h2>
   <div class="timeline" id="warm"></div>
 
 </div>
@@ -69,11 +81,8 @@ function render(boxId, list, emptyText) {
 }
 
 LM.json('world/index.json').then(function (idx) {
-    render('hard', readList(idx, 'hard'),
-        '这里还空着。<br><br>以后每看见一件事，就在这里添一条。');
-
-    render('warm', readList(idx, 'warm'),
-        '这里也还空着。<br><br>微明不比苦厄少，只是不大声。看见了，就替她记下来。');
+    render('hard', readList(idx, 'hard'), '暂无记录');
+    render('warm', readList(idx, 'warm'), '暂无记录');
 });
 </script>
 </body>
