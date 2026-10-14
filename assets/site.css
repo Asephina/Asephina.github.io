@@ -519,6 +519,9 @@ img { max-width: 100%; display: block; }
     max-width: 42em;
 }
 
+/* 抬头里只有标题和引文（没有导语）时，把两者挨近一点 */
+.page-head h1:last-of-type + .page-quote { margin-top: 4px; }
+
 /* 抬头下的分隔线：从主色淡出，收住整页的第一口气 */
 .page-rule {
     height: 1px;
